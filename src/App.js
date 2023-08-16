@@ -19,9 +19,15 @@ import Addcolor from "./pages/Addcolor";
 import Addcat from "./pages/Addcat";
 import Addproduct from "./pages/Addproduct";
 import ViewOrder from "./pages/ViewOrder";
+import useUserLoginInfo from "./hooks/hooks/useLoginInfo";
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {setUserDetails} from "./store/reducers/userDetails-slice";
 function App() {
+
   return (
     <Router>
+      <AuthProvider/>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/reset-password" element={<Resetpassword />} />
@@ -50,6 +56,18 @@ function App() {
       </Routes>
     </Router>
   );
+}
+
+const AuthProvider = ()=>{
+  const userdetails = useUserLoginInfo()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setUserDetails(userdetails))
+
+  }, [userdetails]);
+
+  return (<></>)
 }
 
 export default App;
