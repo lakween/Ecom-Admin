@@ -50,6 +50,7 @@ const Addproduct = () => {
                 toast.success(customAlerts.product.success, {
                     position: toast.POSITION.BOTTOM_CENTER
                 });
+                window.location.reload();
             }).catch((e) => {
                 toast.error(e, {
                     position: toast.POSITION.BOTTOM_CENTER
