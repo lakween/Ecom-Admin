@@ -1,10 +1,11 @@
-import React from "react";
-import { Table } from "antd";
+import React, {useEffect, useState} from "react";
+import {Button, Table} from "antd";
+import {getAllDocFromCollection} from "../actions/CommonAction";
 
 const columns = [
   {
     title: "SNo",
-    dataIndex: "key",
+    dataIndex: "id",
   },
   {
     title: "Title",
@@ -33,27 +34,32 @@ const columns = [
   {
     title: "Action",
     dataIndex: "action",
+    render: (text) => (
+        <div className={''}>
+          <Button>Delete</Button>
+          <Button>View Images</Button>
+        </div>
+
+    ),
   },
 ];
 
 const data1 = [];
-const generateData = (i) => ({
-  key: i,
-  name: 'John Blame ${i}',
-  product: 32,
-  status: 'London, Park Lane No. ${i}',
-});
-
-for (let i = 0; i < 46; i++) {
-  data1.push(generateData(i));
-}
 
 const Productlist = () => {
+
+  const [data,setData] = useState()
+
+
+  useEffect(() => {
+    getAllDocFromCollection('product').then((data)=>setData(data))
+  }, []);
+
   return (
     <div>
       <h3 className="mb-4 title">Products</h3>
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <Table columns={columns} dataSource={data} />
       </div>
     </div>
   );
