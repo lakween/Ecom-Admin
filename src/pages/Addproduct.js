@@ -9,54 +9,68 @@ import {useNavigate} from "react-router-dom";
 import {createDocOfCollection} from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import customAlerts from "../alerts";
+import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 
 
 const {Dragger} = Upload;
 
-const props = {
-    name: 'file',
-    multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    onChange(info) {
-        const {status} = info.file;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-    onDrop(e) {
-        console.log('Dropped files', e.dataTransfer.files);
-    },
-};
-
 const Addproduct = () => {
-    const [desc, setDesc] = useState();
-    // const handleDesc = (e) =>{
-    //    setDesc(e);
-    // }
 
     const [form, setForm] = useState({})
+    const [files, setFiles] = useState({})
     const navigate = useNavigate()
     const valueChangeHandler = (event) => {
         let {name, value} = event.target
         setForm({...form, [name]: value})
     }
 
+    console.log(files, 'fileList')
+
+    const props = {
+        name: 'file',
+        multiple: true,
+        customRequest: (a) => {
+            console.log(a, 'a')
+        },
+        // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+        onChange({file, fileList}) {
+            setFiles(fileList?.map((item) => item?.originFileObj || {}))
+        },
+        onDrop(e) {
+            console.log('Dropped files', e.dataTransfer.files);
+        },
+    };
+
+
     const onClickProductHandler = () => {
-        createDocOfCollection('product', {...form}).then((res) => {
-            setForm({})
-            toast.success(customAlerts.product.success, {
-                position: toast.POSITION.BOTTOM_CENTER
-            });
-        }).catch((e) => {
-            toast.error(e, {
-                position: toast.POSITION.BOTTOM_CENTER
-            });
+        uploadFiles().then((urls) => {
+            createDocOfCollection('product', {...form, "images": urls}).then((res) => {
+                setForm({})
+                setFiles({})
+                toast.success(customAlerts.product.success, {
+                    position: toast.POSITION.BOTTOM_CENTER
+                });
+            }).catch((e) => {
+                toast.error(e, {
+                    position: toast.POSITION.BOTTOM_CENTER
+                });
+            })
         })
+
+    }
+
+    const uploadFiles = async () => {
+        let fileUrls = []
+        if (files.length > 0) {
+            for (let file of files) {
+                const storage = getStorage();
+                const fileRef = ref(storage, `products/${Math.floor(Math.random() * 1000) + file.name}`);
+                const snapshot = await uploadBytes(fileRef, file);
+                let fileUrl = await getDownloadURL(fileRef);
+                fileUrls.push(fileUrl)
+            }
+        }
+        return fileUrls
     }
 
     return (
@@ -76,7 +90,6 @@ const Addproduct = () => {
                     <div className="">
                         <ReactQuill
                             theme="snow"
-                            className={desc}
                             value={form?.description}
                             onChange={(value, a, b, c, d) => {
                                 setForm({...form, 'description': value})
