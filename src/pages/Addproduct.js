@@ -77,8 +77,9 @@ const Addproduct = () => {
                         <ReactQuill
                             theme="snow"
                             className={desc}
-                            onChange={(evt, a, b, c, d) => {
-                                console.log(evt, a, b, c, d)
+                            value={form?.description}
+                            onChange={(value, a, b, c, d) => {
+                                setForm({...form, 'description': value})
                             }}
                         />
                     </div>
@@ -91,25 +92,38 @@ const Addproduct = () => {
                     />
                     <select
                         name="brand"
-                        onChng={valueChangeHandler}
+                        onChange={(e, b) => {
+                            setForm({...form, 'brand': e.target.value})
+                        }}
                         className="form-control py-3 mb-3"
                         id=""
                     >
-                        <option value="">Select Brand</option>
+                        <option value="1">Select Brand</option>
+                        <option value="2">Test One Brand</option>
+                        <option value="3">Test two Barnd</option>
+                        <option value="4">Test three Band</option>
                     </select>
 
                     <select
                         name="category"
                         className="form-control py-3 mb-3"
                         id=""
+                        onChange={(e, b) => {
+                            setForm({...form, 'category': e.target.value})
+                        }}
                     >
-                        <option value="">Select Category</option>
+                        <option value="a">Select Category</option>
+                        <option value="b">avc</option>
+                        <option value="c">asdr</option>
                     </select>
 
                     <select
                         name="tags"
                         className="form-control py-3 mb-3"
                         id=""
+                        onChange={(e, b) => {
+                            setForm({...form, 'tags': e.target.value})
+                        }}
                     >
                         <option value="" disabled>
                             Select Category
@@ -124,6 +138,9 @@ const Addproduct = () => {
                         allowClear
                         className="w-100"
                         placeholder="Select colors"
+                        onChange={(e) => {
+                            setForm({...form, 'color': e.target.value})
+                        }}
                     />
                     <CustomInput
                         onChng={valueChangeHandler}
