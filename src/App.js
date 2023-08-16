@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Resetpassword from "./pages/Resetpassword";
@@ -23,51 +23,66 @@ import useUserLoginInfo from "./hooks/hooks/useLoginInfo";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {setUserDetails} from "./store/reducers/userDetails-slice";
+import {ToastContainer} from "react-toastify";
+
 function App() {
 
-  return (
-    <Router>
-      <AuthProvider/>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/reset-password" element={<Resetpassword />} />
-        <Route path="/forgot-password" element={<Forgotpassword />} />
-        <Route path="/admin" element={<MainLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="enquiries" element={<Enquiries />} />
-          <Route path="blog-list" element={<Bloglist />} />
-          <Route path="blog" element={<Addblog />} />
-          <Route path="blog/:id" element={<Addblog />} />
-          <Route path="blog-category-list" element={<Blogcatlist />} />
-          <Route path="blog-category" element={<Addblogcat />} />
-          <Route path="blog-category/:id" element={<Addblogcat />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="order/:id" element={<ViewOrder />} />
-          <Route path="customers" element={<Customers />} />
-          <Route path="list-color" element={<Colorlist />} />
-          <Route path="color" element={<Addcolor />} />
-          <Route path="color/:id" element={<Addcolor />} />
-          <Route path="list-category" element={<Categorylist />} />
-          <Route path="category" element={<Addcat />} />
-          <Route path="category/:id" element={<Addcat />} />
-          <Route path="list-product" element={<Productlist />} />
-          <Route path="product" element={<Addproduct />} />
-        </Route>
-      </Routes>
-    </Router>
-  );
+    return (
+        <Router>
+            <AuthProvider/>
+            <Routes>
+                <Route path="/" element={<Login/>}/>
+                <Route path="/reset-password" element={<Resetpassword/>}/>
+                <Route path="/forgot-password" element={<Forgotpassword/>}/>
+                <Route path="/admin" element={<MainLayout/>}>
+                    <Route index element={<Dashboard/>}/>
+                    <Route path="enquiries" element={<Enquiries/>}/>
+                    <Route path="blog-list" element={<Bloglist/>}/>
+                    <Route path="blog" element={<Addblog/>}/>
+                    <Route path="blog/:id" element={<Addblog/>}/>
+                    <Route path="blog-category-list" element={<Blogcatlist/>}/>
+                    <Route path="blog-category" element={<Addblogcat/>}/>
+                    <Route path="blog-category/:id" element={<Addblogcat/>}/>
+                    <Route path="orders" element={<Orders/>}/>
+                    <Route path="order/:id" element={<ViewOrder/>}/>
+                    <Route path="customers" element={<Customers/>}/>
+                    <Route path="list-color" element={<Colorlist/>}/>
+                    <Route path="color" element={<Addcolor/>}/>
+                    <Route path="color/:id" element={<Addcolor/>}/>
+                    <Route path="list-category" element={<Categorylist/>}/>
+                    <Route path="category" element={<Addcat/>}/>
+                    <Route path="category/:id" element={<Addcat/>}/>
+                    <Route path="list-product" element={<Productlist/>}/>
+                    <Route path="product" element={<Addproduct/>}/>
+                </Route>
+            </Routes>
+            <ToastContainer
+                position="bottom-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+        </Router>
+
+    );
 }
 
-const AuthProvider = ()=>{
-  const userdetails = useUserLoginInfo()
-  const dispatch = useDispatch()
+const AuthProvider = () => {
+    const userdetails = useUserLoginInfo()
+    const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(setUserDetails(userdetails))
+    useEffect(() => {
+        dispatch(setUserDetails(userdetails))
 
-  }, [userdetails]);
+    }, [userdetails]);
 
-  return (<></>)
+    return (<></>)
 }
 
 export default App;

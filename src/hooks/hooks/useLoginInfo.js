@@ -15,11 +15,11 @@ const useUserLoginInfo = () => {
         firebase.auth().onAuthStateChanged(async function (user) {
             if (user) {
                 let userData = await getDocFromCollection('userProfile', user?.uid);
-                setModel({...userData, id: user?.uid, isLogged: true,photoURL:user?.photoURL});
-
+                if(userData?.type == 'admin') setModel({...userData, id: user?.uid, isLogged: true,photoURL:user?.photoURL});
+                else  navigate('/')
             } else {
                 setModel({isLogged: false});
-                navigate('/')
+                 navigate('/')
             }
         });
     }

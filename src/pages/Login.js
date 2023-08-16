@@ -1,12 +1,14 @@
 import React, {useState} from "react";
 import CustomInput from "../Components/CustomInput";
 import {Link, useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 import firebase from "firebase/compat/app";
 import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
 import {
     getAuth
 } from "firebase/auth";
+import {getDocFromCollection} from "../actions/CommonAction";
 
 const Login = () => {
     const [form, setForm] = useState({})
@@ -18,18 +20,16 @@ const Login = () => {
     const login = async () => {
         try {
             let res = await firebase.auth().signInWithEmailAndPassword(form?.email, form?.password)
-            const auth = getAuth();
-            navigate('/admin')
-            return res
+            const user = await getDocFromCollection('userProfile', res.user.uid)
+            if (user.type == 'admin') navigate('/admin')
+            else toast.error('You are not Admin', {
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+
         } catch (e) {
-            // toast({
-            //     title: JSON.parse(JSON.stringify(e.code)),
-            //     // description: "We've created your account for you.",
-            //     status: 'error',
-            //     duration: 2000,
-            //     isClosable: true,
-            // })
-            return e
+            toast.error(JSON.parse(JSON.stringify(e.code)), {
+                position: toast.POSITION.BOTTOM_CENTER
+            });
         }
     }
 
