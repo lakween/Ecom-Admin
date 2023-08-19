@@ -1,41 +1,58 @@
-import React from "react";
-import { Table } from "antd";
-
-const columns = [
-  {
-    title: "SNo",
-    dataIndex: "key",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-
-  {
-    title: "Action",
-    dataIndex: "action",
-  },
-];
-
-const data1 = [];
-const generateData = (i) => ({
-  key: i,
-  name: 'John Blame ${i}',
-  product: 32,
-  status: 'London, Park Lane No. ${i}',
-});
-
-for (let i = 0; i < 46; i++) {
-  data1.push(generateData(i));
-}
+import React, {useEffect, useState} from "react";
+import {Button, Table} from "antd";
+import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction";
+import {toast} from "react-toastify";
 
 const Categorylist = () => {
+
+  const [data,setData] = useState()
+
+
+  useEffect(() => {
+    getAllDocFromCollectionRT('category',setData)
+  }, []);
+
+  const onDeleteHandler = (id)=>{
+    deleteDocument('category',id).then(()=>{
+      toast.success('category successfully deleted', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
+    }).catch(()=>{
+      toast.error('Failed to delete category.', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
+    })
+  }
+
+  const columns = [
+    {
+      title: "CNo",
+      dataIndex: "id",
+      sorter: (a, b) => a.id - b.id,
+    },
+    {
+      title: "Title",
+      dataIndex: "name",
+      sorter: (a, b) => a.name - b.name,
+    },
+
+    {
+      title: "Action",
+      dataIndex: "id",
+      render: (text) => (
+          <div>
+            <Button onClick={()=>(onDeleteHandler(text))} className={'me-2'}>Delete</Button>
+          </div>
+
+      ),
+    },
+  ];
+
   return (
     <div>
       <h3 className="mb-4 title">Product Categories</h3>
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <Table columns={columns} dataSource={data} />
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import CustomInput from "../Components/CustomInput";
 import {createDocOfCollection} from "../actions/CommonAction";
 import {toast} from "react-toastify";
-import customAlerts from "../alerts";
 import {useNavigate} from "react-router-dom";
 
 const Addcat = () => {
