@@ -12,17 +12,19 @@ const Addcolor = () => {
         setForm({...form, [name]: value})
     }
 
+    console.log(form)
+
     const addColorHandler = () => {
 
-        createDocOfCollection('category', form).then(() => {
-            toast.success('Category successfully added', {
+        createDocOfCollection('color', form).then(() => {
+            toast.success('Color successfully added', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
 
-            navigate('list-color')
+            navigate('/admin/list-color')
 
         }).catch(() => {
-            toast.error('Failed to add Category', {
+            toast.error('Failed to add color', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         })
@@ -34,19 +36,18 @@ const Addcolor = () => {
                 Add Color
             </h3>
             <div>
-                <form action="">
                     <CustomInput
                         onChng={valueChangeHandler}
                         type="color"
                         label="Enter Product Color"
                         id="color"
+                        name="color"
                     />
                     <button
                         onClick={addColorHandler}
                         className="btn btn-success border-0 rounded-3 my-5"
-                        type="submit">Add Color
+                        >Add Color
                     </button>
-                </form>
             </div>
         </div>
     );
