@@ -24,7 +24,6 @@ const Addproduct = () => {
         setForm({...form, [name]: value})
     }
 
-    console.log(files, 'fileList')
 
     const props = {
         name: 'file',
