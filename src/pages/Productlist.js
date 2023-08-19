@@ -9,8 +9,7 @@ const Productlist = () => {
 
 
   useEffect(() => {
-    // getAllDocFromCollection('product').then((data)=>setData(data))
-    getAllDocFromCollectionRT('product',()=>{})
+    getAllDocFromCollectionRT('product',setData)
   }, []);
 
   const onDeleteHandler = ()=>{
