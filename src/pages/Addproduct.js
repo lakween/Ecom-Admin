@@ -19,7 +19,7 @@ const Addproduct = () => {
 
     const [form, setForm] = useState({})
     const [categoryList, setCategoryList] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [colours, setColors] = useState([])
     const [files, setFiles] = useState([])
     let {id} = useParams()
