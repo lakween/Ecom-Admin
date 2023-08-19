@@ -90,7 +90,7 @@ const Addproduct = () => {
             })
 
         } else {
-            setLoading(false)
+            setLoading(true)
             uploadFiles().then((urls, a) => {
                 setLoading(true)
                 createDocOfCollection('product', {...form, "images": urls}).then((res) => {
