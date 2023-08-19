@@ -1,5 +1,5 @@
 import firebase from "firebase/compat/app";
-import {addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, where} from "firebase/firestore";
+import {addDoc, collection,deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, where} from "firebase/firestore";
 import {updateProfile} from "firebase/auth";
 
 export const getDocFromCollection = async (collection, document) => {
@@ -21,6 +21,10 @@ export const getDocFromCollectionRT = async (coll, docum) => {
     }
 }
 
+export const deleteDocument = async (collection, document) => {
+    const db = firebase.firestore();
+    await deleteDoc(doc(db, collection, document));
+}
 
 export const createDocOfCollection = async (collName, data) => {
     const db = firebase.firestore();
