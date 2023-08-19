@@ -34,9 +34,16 @@ const Addproduct = () => {
         getInitalData()
     }, []);
 
+    console.log(form?.images?.map((file,index)=>
+        ({
+            uid: index,
+            name:'under developing',
+            status: 'done',
+            response: 'Server Error 500', // custom error message to show
+            url: file,
+        })))
     const getInitalData = () => {
         getAllDocFromCollection('color').then((data) => {
-            console.log(data, 'dataaaa')
             setColors(data || [])
         })
         getAllDocFromCollection('category').then((data) => {
@@ -57,10 +64,23 @@ const Addproduct = () => {
     const props = {
         name: 'file',
         multiple: true,
-        defaultFileList: files,
-        customRequest: (a) => {
-            console.log(a, 'a')
-        },
+        defaultFileList: [
+            {
+                "uid": 0,
+                "name": "under developing",
+                "status": "done",
+                "response": "Server Error 500",
+                "url": "https://firebasestorage.googleapis.com/v0/b/e-commerce-v1-18dce.appspot.com/o/products%2F932Screenshot%20from%202023-08-18%2016-14-13.png?alt=media&token=e58a3d01-7e6e-4ba5-bd1f-541f82e71a80"
+            },
+            {
+                "uid": 1,
+                "name": "under developing",
+                "status": "done",
+                "response": "Server Error 500",
+                "url": "https://firebasestorage.googleapis.com/v0/b/e-commerce-v1-18dce.appspot.com/o/products%2F158Screenshot%20from%202023-08-18%2016-11-54.png?alt=media&token=af560673-8071-4033-8e5a-994f53ce6392"
+            }
+        ],
+
         // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
         onChange({file, fileList}) {
             setFiles(fileList?.map((item) => item?.originFileObj || {}))
@@ -84,7 +104,8 @@ const Addproduct = () => {
             })
 
         } else {
-            uploadFiles().then((urls) => {
+            uploadFiles().then((urls,a) => {
+                console.log(a,urls)
                 createDocOfCollection('product', {...form, "images": urls}).then((res) => {
                     setForm({})
                     setFiles({})
@@ -244,7 +265,7 @@ const Addproduct = () => {
                         onClick={onClickProductHandler}
                         className="btn btn-success border-0 rounded-3 my-5"
                     >
-                        { id ? 'Update Product' :'Add Product'}
+                        {id ? 'Update Product' : 'Add Product'}
                     </button>
                 </div>
             </div>
