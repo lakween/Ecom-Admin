@@ -103,6 +103,10 @@ export const updateAuthProfile = async (user, model) => {
     let res = await updateProfile(user, model)
 }
 
+export const updateDocOFCollection = async (coll,doc, data) => {
+    const db = firebase.firestore();
+    await setDoc(doc(db, coll, doc), data);
+}
 
 export const getRefFieldOnlyFromFilter = (coll, field, filters) => {
     return async (dispatch) => {

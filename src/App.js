@@ -53,7 +53,9 @@ function App() {
                     <Route path="category" element={<Addcat/>}/>
                     <Route path="category/:id" element={<Addcat/>}/>
                     <Route path="list-product" element={<Productlist/>}/>
-                    <Route path="product" element={<Addproduct/>}/>
+                    <Route path="product" element={<Addproduct/>}>
+                        <Route path=":id" element={<Addproduct/>}/>
+                    </Route>
                 </Route>
             </Routes>
             <ToastContainer

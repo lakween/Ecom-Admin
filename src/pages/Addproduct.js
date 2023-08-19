@@ -1,12 +1,17 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import CustomInput from "../Components/CustomInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import {Select} from "antd";
 import {InboxOutlined} from '@ant-design/icons';
 import {message, Upload} from 'antd';
-import {useNavigate} from "react-router-dom";
-import {createDocOfCollection} from "../actions/CommonAction";
+import {useParams} from "react-router-dom";
+import {
+    createDocOfCollection,
+    getAllDocFromCollection,
+    getDocFromCollection,
+    getDocFromCollectionRT, updateDocOFCollection
+} from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import customAlerts from "../alerts";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
@@ -17,17 +22,43 @@ const {Dragger} = Upload;
 const Addproduct = () => {
 
     const [form, setForm] = useState({})
-    const [files, setFiles] = useState({})
-    const navigate = useNavigate()
+    const [categoryList, setCategoryList] = useState([])
+    const [colours, setColors] = useState([])
+    const [files, setFiles] = useState([])
+    let {id} = useParams()
+
+    useEffect(() => {
+        if (id) getAndSetValues()
+    }, [id]);
+
+    useEffect(() => {
+        getInitalData()
+    }, []);
+
+    const getInitalData = () => {
+        getAllDocFromCollection('color').then((data) => {
+            console.log(data, 'dataaaa')
+            setColors(data || [])
+        })
+        getAllDocFromCollection('category').then((data) => {
+
+            setCategoryList(data || [])
+        })
+    }
+    const getAndSetValues = () => {
+        getDocFromCollection('product', id).then((data) => {
+            setForm(data)
+        })
+    }
     const valueChangeHandler = (event) => {
         let {name, value} = event.target
         setForm({...form, [name]: value})
     }
 
-
     const props = {
         name: 'file',
         multiple: true,
+        defaultFileList: files,
         customRequest: (a) => {
             console.log(a, 'a')
         },
@@ -42,23 +73,40 @@ const Addproduct = () => {
 
 
     const onClickProductHandler = () => {
-        uploadFiles().then((urls) => {
-            createDocOfCollection('product', {...form, "images": urls}).then((res) => {
-                setForm({})
-                setFiles({})
-                toast.success(customAlerts.product.success, {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                window.location.reload();
-            }).catch((e) => {
-                toast.error(e, {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            })
-        })
+        if (id) {
+            updateDocOFCollection('product', id, form).then(() => {
 
+            }).catch(() => {
+
+            })
+
+        } else {
+            uploadFiles().then((urls) => {
+                createDocOfCollection('product', {...form, "images": urls}).then((res) => {
+                    setForm({})
+                    setFiles({})
+                    toast.success(customAlerts.product.success, {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    window.location.reload();
+                }).catch((e) => {
+                    toast.error(e, {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                })
+            })
+        }
     }
 
+    const onDeselectHandler = (value) => {
+        let colours = Array.isArray(form?.colors) ? form?.colors?.filter((col) => (col != value)) : []
+        setForm({...form, 'colors': colours})
+    }
+
+    const onselectHandler = (value) => {
+        let colours = Array.isArray(form?.colors) ? [...form?.colors, value] : [value]
+        setForm({...form, 'colors': colours})
+    }
     const uploadFiles = async () => {
         let fileUrls = []
         if (files.length > 0) {
@@ -108,6 +156,7 @@ const Addproduct = () => {
                         onChange={(e, b) => {
                             setForm({...form, 'brand': e.target.value})
                         }}
+                        value={form?.brand}
                         className="form-control py-3 mb-3"
                         id=""
                     >
@@ -120,20 +169,24 @@ const Addproduct = () => {
                     <select
                         name="category"
                         className="form-control py-3 mb-3"
-                        id=""
+                        value={form?.category}
                         onChange={(e, b) => {
                             setForm({...form, 'category': e.target.value})
                         }}
                     >
-                        <option value="a">Select Category</option>
-                        <option value="b">avc</option>
-                        <option value="c">asdr</option>
+                        <option value="">Select Category</option>
+                        {
+                            categoryList?.map((item) =>
+                                <option value={item.id}>{item.name}</option>
+                            )
+                        }
                     </select>
 
                     <select
                         name="tags"
                         className="form-control py-3 mb-3"
                         id=""
+                        value={form.tags}
                         onChange={(e, b) => {
                             setForm({...form, 'tags': e.target.value})
                         }}
@@ -141,20 +194,31 @@ const Addproduct = () => {
                         <option value="" disabled>
                             Select Category
                         </option>
-                        <option value="featured">Featured</option>
-                        <option value="popular">Popular</option>
-                        <option value="special">Special</option>
+
                     </select>
 
                     <Select
                         mode="multiple"
+                        value={form?.colors}
                         allowClear
                         className="w-100"
                         placeholder="Select colors"
-                        onChange={(e) => {
-                            setForm({...form, 'color': e.target.value})
-                        }}
-                    />
+                        onDeselect={onDeselectHandler}
+                        onSelect={onselectHandler}
+                    >
+                        {
+                            colours?.map((item) =>
+                                <option value={item.id}>
+                                    <div style={{
+                                        backgroundColor: item?.color,
+                                        height: "15px",
+                                        width: "15px",
+                                        borderRadius: '100%'
+                                    }}></div>
+                                </option>
+                            )
+                        }
+                    </Select>
                     <CustomInput
                         onChng={valueChangeHandler}
                         type="number"
@@ -176,9 +240,8 @@ const Addproduct = () => {
                     <button
                         onClick={onClickProductHandler}
                         className="btn btn-success border-0 rounded-3 my-5"
-                        type="submit"
                     >
-                        Add Product
+                        { id ? 'Update Product' :'Add Product'}
                     </button>
                 </div>
             </div>
