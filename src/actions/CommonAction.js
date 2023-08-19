@@ -41,6 +41,18 @@ export const getAllDocFromCollection = async (collName) => {
     }
     return array
 }
+//this function call every time when change the collection( for realtime update)
+export const getAllDocFromCollectionRT = async (collName,callBack) => {
+    const db = firebase.firestore();
+
+    onSnapshot(collection(db, collName), (querySnapshot) => {
+        let array = []
+        for (let document of querySnapshot.docs) {
+            array.push({...document?.data(), id: document?.id})
+        }
+        callBack(array)
+    });
+}
 
 export const filterDocsFromCollection = async (coll, fields, filters) => {
     const db = firebase.firestore();
