@@ -48,10 +48,10 @@ const Productlist = () => {
             dataIndex: "category",
             sorter: (a, b) => a.category - b.category,
         },
-        {
-            title: "Color",
-            dataIndex: "color",
-        },
+        // {
+        //     title: "Color",
+        //     dataIndex: "color",
+        // },
         {
             title: "Price",
             dataIndex: "price",
@@ -63,7 +63,6 @@ const Productlist = () => {
             render: (text) => (
                 <div>
                     <Button onClick={() => (onDeleteHandler(text))} className={'me-2'}>Delete</Button>
-                    <Button>View Images</Button>
                 </div>
             ),
         },

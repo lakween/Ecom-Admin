@@ -2,14 +2,11 @@ import React, {useEffect, useState} from "react";
 import CustomInput from "../Components/CustomInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import {Select, Upload} from "antd";
+import {Select, Spin, Upload} from "antd";
 import {InboxOutlined} from '@ant-design/icons';
 import {useParams} from "react-router-dom";
 import {
-    createDocOfCollection,
-    getAllDocFromCollection,
-    getDocFromCollection,
-    updateDocOFCollection
+    createDocOfCollection, getAllDocFromCollection, getDocFromCollection, updateDocOFCollection
 } from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import customAlerts from "../alerts";
@@ -22,6 +19,7 @@ const Addproduct = () => {
 
     const [form, setForm] = useState({})
     const [categoryList, setCategoryList] = useState([])
+    const [loading, setLoading] = useState(true)
     const [colours, setColors] = useState([])
     const [files, setFiles] = useState([])
     let {id} = useParams()
@@ -34,14 +32,10 @@ const Addproduct = () => {
         getInitalData()
     }, []);
 
-    console.log(form?.images?.map((file,index)=>
-        ({
-            uid: index,
-            name:'under developing',
-            status: 'done',
-            response: 'Server Error 500', // custom error message to show
-            url: file,
-        })))
+    console.log(form?.images?.map((file, index) => ({
+        uid: index, name: 'under developing', status: 'done', response: 'Server Error 500', // custom error message to show
+        url: file,
+    })))
     const getInitalData = () => {
         getAllDocFromCollection('color').then((data) => {
             setColors(data || [])
@@ -52,9 +46,13 @@ const Addproduct = () => {
         })
     }
     const getAndSetValues = () => {
+        setLoading(true)
         getDocFromCollection('product', id).then((data) => {
             setForm(data)
+        }).finally(() => {
+            setLoading(false)
         })
+
     }
     const valueChangeHandler = (event) => {
         let {name, value} = event.target
@@ -62,36 +60,22 @@ const Addproduct = () => {
     }
 
     const props = {
-        name: 'file',
-        multiple: true,
-        defaultFileList: [
-            {
-                "uid": 0,
-                "name": "under developing",
-                "status": "done",
-                "response": "Server Error 500",
-                "url": "https://firebasestorage.googleapis.com/v0/b/e-commerce-v1-18dce.appspot.com/o/products%2F932Screenshot%20from%202023-08-18%2016-14-13.png?alt=media&token=e58a3d01-7e6e-4ba5-bd1f-541f82e71a80"
-            },
-            {
-                "uid": 1,
-                "name": "under developing",
-                "status": "done",
-                "response": "Server Error 500",
-                "url": "https://firebasestorage.googleapis.com/v0/b/e-commerce-v1-18dce.appspot.com/o/products%2F158Screenshot%20from%202023-08-18%2016-11-54.png?alt=media&token=af560673-8071-4033-8e5a-994f53ce6392"
-            }
-        ],
+        name: 'file', multiple: true, defaultFileList: form?.images?.map((file, index) => ({
+            uid: index, name: 'under developing', status: 'done', response: 'Server Error 500', // custom error message to show
+            url: file,
+        })),
 
         // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
         onChange({file, fileList}) {
             setFiles(fileList?.map((item) => item?.originFileObj || {}))
-        },
-        onDrop(e) {
+        }, onDrop(e) {
             console.log('Dropped files', e.dataTransfer.files);
         },
     };
 
 
     const onClickProductHandler = () => {
+        setLoading(true)
         if (id) {
             updateDocOFCollection('product', id, form).then(() => {
                 toast.success('Updated Product successfully', {
@@ -101,23 +85,30 @@ const Addproduct = () => {
                 toast.error('Updated Product fails', {
                     position: toast.POSITION.BOTTOM_CENTER
                 });
+            }).finally(() => {
+                setLoading(false)
             })
 
         } else {
-            uploadFiles().then((urls,a) => {
-                console.log(a,urls)
+            setLoading(false)
+            uploadFiles().then((urls, a) => {
+                setLoading(true)
                 createDocOfCollection('product', {...form, "images": urls}).then((res) => {
                     setForm({})
                     setFiles({})
                     toast.success(customAlerts.product.success, {
                         position: toast.POSITION.BOTTOM_CENTER
-                    });
+                    })
                     window.location.reload();
                 }).catch((e) => {
                     toast.error(e, {
                         position: toast.POSITION.BOTTOM_CENTER
                     });
+                }).finally(() => {
+                    setLoading(false)
                 })
+            }).finally(() => {
+                setLoading(false)
             })
         }
     }
@@ -145,9 +136,10 @@ const Addproduct = () => {
         return fileUrls
     }
 
-    return (
-        <div>
-            <h3 className="mb-4 title">Add Product</h3>
+    return (<div>
+        <h3 className="mb-4 title">Add Product</h3>{
+        loading ? <div className="d-flex justify-content-center align-items-center " style={{minHeight: '70vh'}}><Spin
+                style={{minHeight: '100%', width: '100%'}}/></div> :
             <div>
                 <div
                     className="d-flex gap-3 flex-column"
@@ -199,11 +191,7 @@ const Addproduct = () => {
                         }}
                     >
                         <option value="">Select Category</option>
-                        {
-                            categoryList?.map((item) =>
-                                <option value={item.id}>{item.name}</option>
-                            )
-                        }
+                        {categoryList?.map((item) => <option value={item.id}>{item.name}</option>)}
                     </select>
 
                     <select
@@ -230,18 +218,11 @@ const Addproduct = () => {
                         onDeselect={onDeselectHandler}
                         onSelect={onselectHandler}
                     >
-                        {
-                            colours?.map((item) =>
-                                <option value={item.id}>
-                                    <div style={{
-                                        backgroundColor: item?.color,
-                                        height: "15px",
-                                        width: "15px",
-                                        borderRadius: '100%'
-                                    }}></div>
-                                </option>
-                            )
-                        }
+                        {colours?.map((item) => <option value={item.id}>
+                            <div style={{
+                                backgroundColor: item?.color, height: "15px", width: "15px", borderRadius: '100%'
+                            }}></div>
+                        </option>)}
                     </Select>
                     <CustomInput
                         onChng={valueChangeHandler}
@@ -268,9 +249,8 @@ const Addproduct = () => {
                         {id ? 'Update Product' : 'Add Product'}
                     </button>
                 </div>
-            </div>
-        </div>
-    );
+            </div>}
+    </div>);
 };
 
 export default Addproduct;
