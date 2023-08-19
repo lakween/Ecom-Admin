@@ -1,5 +1,16 @@
 import firebase from "firebase/compat/app";
-import {addDoc, collection,deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, where} from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    onSnapshot,
+    query,
+    setDoc,
+    where
+} from "firebase/firestore";
 import {updateProfile} from "firebase/auth";
 
 export const getDocFromCollection = async (collection, document) => {
@@ -46,7 +57,7 @@ export const getAllDocFromCollection = async (collName) => {
     return array
 }
 //this function call every time when change the collection( for realtime update)
-export const getAllDocFromCollectionRT = async (collName,callBack) => {
+export const getAllDocFromCollectionRT = async (collName, callBack) => {
     const db = firebase.firestore();
 
     onSnapshot(collection(db, collName), (querySnapshot) => {
@@ -103,9 +114,9 @@ export const updateAuthProfile = async (user, model) => {
     let res = await updateProfile(user, model)
 }
 
-export const updateDocOFCollection = async (coll,doc, data) => {
+export const updateDocOFCollection = async (coll, document, data) => {
     const db = firebase.firestore();
-    await setDoc(doc(db, coll, doc), data);
+    const docRef = await setDoc(doc(db, coll, document), data);
 }
 
 export const getRefFieldOnlyFromFilter = (coll, field, filters) => {

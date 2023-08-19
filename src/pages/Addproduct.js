@@ -1,16 +1,15 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import CustomInput from "../Components/CustomInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import {Select} from "antd";
+import {Select, Upload} from "antd";
 import {InboxOutlined} from '@ant-design/icons';
-import {message, Upload} from 'antd';
 import {useParams} from "react-router-dom";
 import {
     createDocOfCollection,
     getAllDocFromCollection,
     getDocFromCollection,
-    getDocFromCollectionRT, updateDocOFCollection
+    updateDocOFCollection
 } from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import customAlerts from "../alerts";
@@ -75,9 +74,13 @@ const Addproduct = () => {
     const onClickProductHandler = () => {
         if (id) {
             updateDocOFCollection('product', id, form).then(() => {
-
+                toast.success('Updated Product successfully', {
+                    position: toast.POSITION.BOTTOM_CENTER
+                });
             }).catch(() => {
-
+                toast.error('Updated Product fails', {
+                    position: toast.POSITION.BOTTOM_CENTER
+                });
             })
 
         } else {
