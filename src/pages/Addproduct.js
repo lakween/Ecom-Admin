@@ -32,10 +32,6 @@ const Addproduct = () => {
         getInitalData()
     }, []);
 
-    console.log(form?.images?.map((file, index) => ({
-        uid: index, name: 'under developing', status: 'done', response: 'Server Error 500', // custom error message to show
-        url: file,
-    })))
     const getInitalData = () => {
         getAllDocFromCollection('color').then((data) => {
             setColors(data || [])
@@ -114,7 +110,7 @@ const Addproduct = () => {
     }
 
     const onDeselectHandler = (value) => {
-        let colours = Array.isArray(form?.colors) ? form?.colors?.filter((col) => (col != value)) : []
+        let colours = Array.isArray(form?.colors) ? form?.colors?.filter((col) => (col !== value)) : []
         setForm({...form, 'colors': colours})
     }
 
