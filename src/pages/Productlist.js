@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, Table} from "antd";
-import {getAllDocFromCollection, getAllDocFromCollectionRT} from "../actions/CommonAction";
+import {deleteDocument, getAllDocFromCollection, getAllDocFromCollectionRT} from "../actions/CommonAction";
+import {toast} from "react-toastify";
 
 
 const Productlist = () => {
@@ -12,8 +13,16 @@ const Productlist = () => {
     getAllDocFromCollectionRT('product',setData)
   }, []);
 
-  const onDeleteHandler = ()=>{
-
+  const onDeleteHandler = (id)=>{
+    deleteDocument('product',id).then(()=>{
+      toast.success('Product successfully deleted', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
+    }).catch(()=>{
+      toast.error('Failed to delete Product.', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
+    })
   }
 
   const columns = [
