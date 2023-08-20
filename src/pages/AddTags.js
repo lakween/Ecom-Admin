@@ -14,13 +14,13 @@ const AddTags = () => {
     }
 
     const addTagHandler = () => {
-        createDocOfCollection('category', form).then(() => {
-            toast.success('Category successfully added', {
+        createDocOfCollection('tag', form).then(() => {
+            toast.success('Tag successfully added', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
-            navigate('/admin/list-category')
+            navigate('/admin/list-tag')
         }).catch(() => {
-            toast.error('Failed to add Category', {
+            toast.error('Failed to add tag', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         })
