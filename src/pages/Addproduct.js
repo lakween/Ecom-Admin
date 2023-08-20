@@ -12,7 +12,6 @@ import {toast} from "react-toastify";
 import customAlerts from "../alerts";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 
-
 const {Dragger} = Upload;
 
 const Addproduct = () => {
@@ -21,8 +20,12 @@ const Addproduct = () => {
     const [categoryList, setCategoryList] = useState([])
     const [loading, setLoading] = useState(false)
     const [colours, setColors] = useState([])
+    const [tags, setTags] = useState([])
+    const [brands, setBrands] = useState([])
     const [files, setFiles] = useState([])
     let {id} = useParams()
+
+    const {Option} = Select
 
     useEffect(() => {
         if (id) getAndSetValues()
@@ -114,8 +117,18 @@ const Addproduct = () => {
         setForm({...form, 'colors': colours})
     }
 
+    const onDeselectTagHandler = (value) => {
+        let tags = Array.isArray(form?.colors) ? form?.colors?.filter((col) => (col !== value)) : []
+        setForm({...form, 'colors': colours})
+    }
+
     const onselectHandler = (value) => {
         let colours = Array.isArray(form?.colors) ? [...form?.colors, value] : [value]
+        setForm({...form, 'colors': colours})
+    }
+
+    const onselectTagHandler = (value) => {
+        let tags = Array.isArray(form?.colors) ? [...form?.colors, value] : [value]
         setForm({...form, 'colors': colours})
     }
     const uploadFiles = async () => {
@@ -174,7 +187,7 @@ const Addproduct = () => {
                             className="form-control py-3 mb-3"
                             id=""
                         >
-                            <option value="1">Select Brand</option>
+                            <Option value="1">Select Brand</Option>
                             <option value="2">Test One Brand</option>
                             <option value="3">Test two Barnd</option>
                             <option value="4">Test three Band</option>
@@ -188,24 +201,28 @@ const Addproduct = () => {
                                 setForm({...form, 'category': e.target.value})
                             }}
                         >
-                            <option value="">Select Category</option>
-                            {categoryList?.map((item) => <option value={item.id}>{item.name}</option>)}
+                            {categoryList?.map((item) => <Option value={item.id}>{item.name}</Option>)}
                         </select>
 
-                        <select
-                            name="tags"
-                            className="form-control py-3 mb-3"
-                            id=""
-                            value={form.tags}
-                            onChange={(e, b) => {
-                                setForm({...form, 'tags': e.target.value})
-                            }}
+                        <Select
+                            mode="multiple"
+                            value={form?.tags}
+                            allowClear
+                            className="w-100"
+                            placeholder="Select Tags"
+                            onDeselect={onDeselectTagHandler}
+                            onSelect={onselectTagHandler}
                         >
-                            <option value="" disabled>
-                                Select Category
-                            </option>
 
-                        </select>
+                            {
+                                tags?.map((items) => (
+                                    <Option value={items?.id} disabled>
+                                        {items?.name}
+                                    </Option>
+                                ))
+                            }
+
+                        </Select>
 
                         <Select
                             mode="multiple"
