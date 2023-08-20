@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {Button, Table} from "antd";
-import {deleteDocument, getAllDocFromCollection, getAllDocFromCollectionRT} from "../actions/CommonAction";
+import {
+    deleteDocument,
+    getAllDocFromCollection,
+    getAllDocFromCollectionRT,
+    getDocFromCollection
+} from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import {Link, useParams} from "react-router-dom";
 
@@ -8,10 +13,32 @@ import {Link, useParams} from "react-router-dom";
 const Productlist = () => {
 
     const [data, setData] = useState()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        getAllDocFromCollectionRT('product', setData)
+        setLoading(true)
+        getAllDocFromCollectionRT('product', buildDataForTable)
     }, []);
+
+    const buildDataForTable = async (data) => {
+        let array = []
+        for (let row of data) {
+            let brandDoc = {}
+            let categoryDoc = {}
+            try {
+                if (row?.brand) brandDoc = await getDocFromCollection('brand', row?.brand)
+                if (row?.category) categoryDoc = await getDocFromCollection('category', row?.category)
+                array.push({...row, brand: brandDoc?.name || '', category: categoryDoc?.name || ''})
+
+            } catch (e) {
+                console.log(e)
+            }
+
+        }
+        setData(array)
+        setLoading(false)
+    }
+
 
     const onDeleteHandler = (id) => {
         deleteDocument('product', id).then(() => {
@@ -73,7 +100,7 @@ const Productlist = () => {
         <div>
             <h3 className="mb-4 title">Products</h3>
             <div>
-                <Table columns={columns} dataSource={data}/>
+                <Table className={'vh-20'} loading={loading} columns={columns} dataSource={data}/>
             </div>
         </div>
     );

@@ -6,12 +6,14 @@ import {Select, Spin, Upload} from "antd";
 import {InboxOutlined} from '@ant-design/icons';
 import {useParams} from "react-router-dom";
 import {
-    createDocOfCollection, getAllDocFromCollection, getDocFromCollection, updateDocOFCollection
+    createDocOfCollection,
+    getAllDocFromCollection,
+    getDocFromCollection,
+    updateDocOFCollection
 } from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import customAlerts from "../alerts";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
-import brandList from "./BrandList";
 
 const {Dragger} = Upload;
 
@@ -31,7 +33,11 @@ const Addproduct = () => {
     useEffect(() => {
         if (id) getAndSetValues()
         else {
+            setForm({})
+        }
 
+        return () => {
+            setForm({})
         }
     }, [id]);
 
@@ -99,9 +105,9 @@ const Addproduct = () => {
 
         } else {
             setLoading(true)
-            uploadFiles().then((urls, a) => {
+            uploadFiles().then((urls) => {
                 setLoading(true)
-                createDocOfCollection('product', {...form, "images": urls}).then((res) => {
+                createDocOfCollection('product', {...form, "images": urls}).then(() => {
                     setForm({})
                     setFiles({})
                     toast.success(customAlerts.product.success, {
@@ -169,7 +175,7 @@ const Addproduct = () => {
                             type="text"
                             label="Enter Product Title"
                             name="title"
-                            value={form?.title}
+                            value={form?.title || ''}
                         />
                         <div className="">
                             <ReactQuill
@@ -185,7 +191,7 @@ const Addproduct = () => {
                             onChng={valueChangeHandler}
                             label="Enter Product Price"
                             name="price"
-                            value={form?.price}
+                            value={form?.price || ''}
                         />
                         <div className="d-flex ms-1 w-100  gap-5">
                             <div>
@@ -195,7 +201,7 @@ const Addproduct = () => {
                                     placeholder={'category'}
                                     name="category"
                                     className="ms-2 w-250"
-                                    value={form?.category}
+                                    value={form?.category || ''}
                                     id={'category'}
                                     onChange={(e, {value}) => {
                                         setForm({...form, "category": value})
