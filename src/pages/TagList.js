@@ -8,16 +8,16 @@ const TagList = ()=>{
     const [data, setData] = useState()
 
     useEffect(() => {
-        getAllDocFromCollectionRT('product', setData)
+        getAllDocFromCollectionRT('tag', setData)
     }, []);
 
     const onDeleteHandler = (id) => {
-        deleteDocument('product', id).then(() => {
-            toast.success('Product successfully deleted', {
+        deleteDocument('tag', id).then(() => {
+            toast.success('Tag successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         }).catch(() => {
-            toast.error('Failed to delete Product.', {
+            toast.error('Failed to delete tag.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         })
@@ -32,28 +32,9 @@ const TagList = ()=>{
             ),
         },
         {
-            title: "Title",
-            dataIndex: "title",
+            title: "Tag Name",
+            dataIndex: "name",
             sorter: (a, b) => a.title - b.title,
-        },
-        {
-            title: "Brand",
-            dataIndex: "brand",
-            sorter: (a, b) => a.brand - b.brand,
-        },
-        {
-            title: "Category",
-            dataIndex: "category",
-            sorter: (a, b) => a.category - b.category,
-        },
-        // {
-        //     title: "Color",
-        //     dataIndex: "color",
-        // },
-        {
-            title: "Price",
-            dataIndex: "price",
-            sorter: (a, b) => a.price - b.price,
         },
         {
             title: "Action",
@@ -68,7 +49,7 @@ const TagList = ()=>{
 
     return (
         <div>
-            <h3 className="mb-4 title">Products</h3>
+            <h3 className="mb-4 title">Tags</h3>
             <div>
                 <Table columns={columns} dataSource={data}/>
             </div>
