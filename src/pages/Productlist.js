@@ -41,6 +41,7 @@ const Productlist = () => {
 
 
     const onDeleteHandler = (id) => {
+        setLoading(true)
         deleteDocument('product', id).then(() => {
             toast.success('Product successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
@@ -49,6 +50,8 @@ const Productlist = () => {
             toast.error('Failed to delete Product.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
@@ -80,7 +83,7 @@ const Productlist = () => {
         //     dataIndex: "color",
         // },
         {
-            title: "Price",
+            title: "Price(LKR)",
             dataIndex: "price",
             sorter: (a, b) => a.price - b.price,
         },
@@ -100,7 +103,8 @@ const Productlist = () => {
         <div>
             <h3 className="mb-4 title">Products</h3>
             <div>
-                <Table className={'vh-20'} loading={loading} columns={columns} dataSource={data}/>
+                <Table pagination={false} scroll={{x: 1500, y: 1000}} loading={loading} columns={columns}
+                       dataSource={data}/>
             </div>
         </div>
     );
