@@ -8,16 +8,16 @@ const BrandList = ()=>{
     const [data, setData] = useState()
 
     useEffect(() => {
-        getAllDocFromCollectionRT('product', setData)
+        getAllDocFromCollectionRT('brand', setData)
     }, []);
 
     const onDeleteHandler = (id) => {
-        deleteDocument('product', id).then(() => {
-            toast.success('Product successfully deleted', {
+        deleteDocument('brand', id).then(() => {
+            toast.success('Brand successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         }).catch(() => {
-            toast.error('Failed to delete Product.', {
+            toast.error('Failed to delete Brand.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         })
@@ -28,32 +28,13 @@ const BrandList = ()=>{
             title: "SNo",
             dataIndex: "id",
             render: (text) => (
-                <Link to={`/admin/product/${text}`}>{text}</Link>
+                <Link to={`/admin/brand/${text}`}>{text}</Link>
             ),
         },
         {
-            title: "Title",
-            dataIndex: "title",
-            sorter: (a, b) => a.title - b.title,
-        },
-        {
             title: "Brand",
-            dataIndex: "brand",
+            dataIndex: "name",
             sorter: (a, b) => a.brand - b.brand,
-        },
-        {
-            title: "Category",
-            dataIndex: "category",
-            sorter: (a, b) => a.category - b.category,
-        },
-        // {
-        //     title: "Color",
-        //     dataIndex: "color",
-        // },
-        {
-            title: "Price",
-            dataIndex: "price",
-            sorter: (a, b) => a.price - b.price,
         },
         {
             title: "Action",
@@ -68,7 +49,7 @@ const BrandList = ()=>{
 
     return (
         <div>
-            <h3 className="mb-4 title">Products</h3>
+            <h3 className="mb-4 title">Brands</h3>
             <div>
                 <Table columns={columns} dataSource={data}/>
             </div>

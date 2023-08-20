@@ -13,14 +13,14 @@ const AddBrand = () => {
         setForm({...form, [name]: value})
     }
 
-    const addTagHandler = () => {
-        createDocOfCollection('category', form).then(() => {
-            toast.success('Category successfully added', {
+    const addBrandHandler = () => {
+        createDocOfCollection('brand', form).then(() => {
+            toast.success('Brand successfully added', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
-            navigate('/admin/list-category')
+            navigate('/admin/list-brand')
         }).catch(() => {
-            toast.error('Failed to add Category', {
+            toast.error('Failed to add brand', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         })
@@ -29,19 +29,19 @@ const AddBrand = () => {
     return (
         <div>
             <h3 className="mb-4  title">
-                Add Tags
+                Add Brand
             </h3>
             <div>
                 <CustomInput
                     onChng={valueChangeHandler}
                     type="text"
                     name="name"
-                    label="Enter Tag"
+                    label="Enter brand"
                     id="blogcat"
                 />
-                <button onClick={addTagHandler}
+                <button onClick={addBrandHandler}
                         className="btn btn-success border-0 rounded-3 my-5"
-                >Add Tag
+                >Add Brand
                 </button>
             </div>
         </div>

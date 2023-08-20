@@ -58,7 +58,7 @@ function App() {
                     <Route path="category/:id" element={<Addcat/>}/>
                     <Route path="tag" element={<AddTags/>}/>
                     <Route path="list-tag" element={<TagList/>}/>
-                    <Route path="brand" element={<Categorylist/>}/><Route path="tag" element={<AddBrand/>}/>
+                    <Route path="brand" element={<AddBrand/>}/>
                     <Route path="list-brand" element={<BrandList/>}/>
                     <Route path="list-product" element={<Productlist/>}/>
                     <Route path="product" element={<Addproduct/>}>
