@@ -30,6 +30,9 @@ const Addproduct = () => {
 
     useEffect(() => {
         if (id) getAndSetValues()
+        else {
+
+        }
     }, [id]);
 
     useEffect(() => {
@@ -129,7 +132,7 @@ const Addproduct = () => {
     }
 
     const onDeselectTagHandler = (value) => {
-        let tags = Array.isArray(form?.tags) ? form?.colors?.filter((tag) => (tag !== value)) : []
+        let tags = Array.isArray(form?.tags) ? form?.tags?.filter((tag) => (tag !== value)) : []
         setForm({...form, 'tags': tags})
     }
 
@@ -194,8 +197,8 @@ const Addproduct = () => {
                                     className="ms-2 w-250"
                                     value={form?.category}
                                     id={'category'}
-                                    onChange={(e, {key, value}) => {
-                                        setForm({...form, [key]: value})
+                                    onChange={(e, {value}) => {
+                                        setForm({...form, "category": value})
                                     }}
                                 >
                                     {categoryList?.map((item) => <Option key={item.id}
@@ -213,7 +216,7 @@ const Addproduct = () => {
                                     className="ms-2 min-w-[200px]"
                                     placeholder="Select brand"
                                     onChange={(e, {key, value}) => {
-                                        setForm({...form, [key]: value})
+                                        setForm({...form, brand: value})
                                     }}
                                 >
 
@@ -262,14 +265,14 @@ const Addproduct = () => {
                                     onDeselect={onDeselectHandler}
                                     onSelect={onselectHandler}
                                 >
-                                    {colours?.map((item) => <option value={item.id}>
+                                    {colours?.map((item) => <Option value={item.id}>
                                         <div style={{
                                             backgroundColor: item?.color,
                                             height: "15px",
                                             width: "15px",
                                             borderRadius: '100%'
                                         }}></div>
-                                    </option>)}
+                                    </Option>)}
                                 </Select>
                             </div>
                         </div>
