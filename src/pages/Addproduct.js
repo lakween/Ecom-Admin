@@ -40,8 +40,13 @@ const Addproduct = () => {
             setColors(data || [])
         })
         getAllDocFromCollection('category').then((data) => {
-
             setCategoryList(data || [])
+        })
+        getAllDocFromCollection('tag').then((data) => {
+            setTags(data || [])
+        })
+        getAllDocFromCollection('brand').then((data) => {
+            setBrands(data || [])
         })
     }
     const getAndSetValues = () => {
@@ -117,19 +122,19 @@ const Addproduct = () => {
         setForm({...form, 'colors': colours})
     }
 
-    const onDeselectTagHandler = (value) => {
-        let tags = Array.isArray(form?.colors) ? form?.colors?.filter((col) => (col !== value)) : []
-        setForm({...form, 'colors': colours})
-    }
-
     const onselectHandler = (value) => {
         let colours = Array.isArray(form?.colors) ? [...form?.colors, value] : [value]
         setForm({...form, 'colors': colours})
     }
 
+    const onDeselectTagHandler = (value) => {
+        let tags = Array.isArray(form?.tags) ? form?.colors?.filter((tag) => (tag !== value)) : []
+        setForm({...form, 'tags': tags})
+    }
+
     const onselectTagHandler = (value) => {
-        let tags = Array.isArray(form?.colors) ? [...form?.colors, value] : [value]
-        setForm({...form, 'colors': colours})
+        let tags = Array.isArray(form?.tags) ? [...form?.tags, value] : [value]
+        setForm({...form, 'tags': tags})
     }
     const uploadFiles = async () => {
         let fileUrls = []
@@ -147,7 +152,7 @@ const Addproduct = () => {
 
     return (
         <div>
-            <h3 className="mb-4 title">Add Product</h3>{
+            <h3 className="mb-4 title">{id ? 'View Product' : 'Add Product'}</h3>{
             loading ?
                 <div className="d-flex justify-content-center align-items-center " style={{minHeight: '70vh'}}><Spin
                     style={{minHeight: '100%', width: '100%'}}/></div> :
@@ -178,67 +183,63 @@ const Addproduct = () => {
                             name="price"
                             value={form?.price}
                         />
-                        <select
-                            name="brand"
-                            onChange={(e, b) => {
-                                setForm({...form, 'brand': e.target.value})
-                            }}
-                            value={form?.brand}
-                            className="form-control py-3 mb-3"
-                            id=""
-                        >
-                            <Option value="1">Select Brand</Option>
-                            <option value="2">Test One Brand</option>
-                            <option value="3">Test two Barnd</option>
-                            <option value="4">Test three Band</option>
-                        </select>
+                        <div className="d-flex ms-1 w-100  gap-5">
+                            <div>
+                                <label htmlFor={'category'}>Category</label>
+                                <Select
+                                    placeholder={'category'}
+                                    name="category"
+                                    className="ms-2 min-w-200"
+                                    value={form?.category}
+                                    onChange={(e, b) => {
+                                        setForm({...form, 'category': e.target.value})
+                                    }}
+                                >
+                                    {categoryList?.map((item) => <Option value={item.id}>{item.name}</Option>)}
+                                </Select>
+                            </div>
+                            <div>
+                                <label htmlFor={'Tags'}>Tags</label>
+                                <Select
+                                    mode="multiple"
+                                    value={form?.tags}
+                                    allowClear
+                                    className="ms-2 min-w-[200px]"
+                                    placeholder="Select Tags"
+                                    onDeselect={onDeselectTagHandler}
+                                    onSelect={onselectTagHandler}
+                                >
 
-                        <select
-                            name="category"
-                            className="form-control py-3 mb-3"
-                            value={form?.category}
-                            onChange={(e, b) => {
-                                setForm({...form, 'category': e.target.value})
-                            }}
-                        >
-                            {categoryList?.map((item) => <Option value={item.id}>{item.name}</Option>)}
-                        </select>
+                                    {
+                                        tags?.map((items) => (
+                                            <Option value={items?.id}>
+                                                {items?.name}
+                                            </Option>
+                                        ))
+                                    }
 
-                        <Select
-                            mode="multiple"
-                            value={form?.tags}
-                            allowClear
-                            className="w-100"
-                            placeholder="Select Tags"
-                            onDeselect={onDeselectTagHandler}
-                            onSelect={onselectTagHandler}
-                        >
+                                </Select>
+                            </div>
+                            <div>
+                                <label htmlFor={'colors'}>Colors</label>
+                                <Select
+                                    mode="multiple"
+                                    value={form?.colors}
+                                    allowClear
+                                    className="ms-2 min-w-[200px]"
+                                    placeholder="Select colors"
+                                    onDeselect={onDeselectHandler}
+                                    onSelect={onselectHandler}
+                                >
+                                    {colours?.map((item) => <option value={item.id}>
+                                        <div style={{
+                                            backgroundColor: item?.color, height: "15px", width: "15px", borderRadius: '100%'
+                                        }}></div>
+                                    </option>)}
+                                </Select>
+                            </div>
+                        </div>
 
-                            {
-                                tags?.map((items) => (
-                                    <Option value={items?.id} disabled>
-                                        {items?.name}
-                                    </Option>
-                                ))
-                            }
-
-                        </Select>
-
-                        <Select
-                            mode="multiple"
-                            value={form?.colors}
-                            allowClear
-                            className="w-100"
-                            placeholder="Select colors"
-                            onDeselect={onDeselectHandler}
-                            onSelect={onselectHandler}
-                        >
-                            {colours?.map((item) => <option value={item.id}>
-                                <div style={{
-                                    backgroundColor: item?.color, height: "15px", width: "15px", borderRadius: '100%'
-                                }}></div>
-                            </option>)}
-                        </Select>
                         <CustomInput
                             onChng={valueChangeHandler}
                             type="number"
