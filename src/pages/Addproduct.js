@@ -11,6 +11,7 @@ import {
 import {toast} from "react-toastify";
 import customAlerts from "../alerts";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import brandList from "./BrandList";
 
 const {Dragger} = Upload;
 
@@ -187,47 +188,50 @@ const Addproduct = () => {
                             <div>
                                 <label htmlFor={'category'}>Category</label>
                                 <Select
-                                    style={{width:'200px'}}
+                                    style={{width: '200px'}}
                                     placeholder={'category'}
                                     name="category"
                                     className="ms-2 w-250"
                                     value={form?.category}
                                     id={'category'}
-                                    onChange={(e, {key,value}) => {
+                                    onChange={(e, {key, value}) => {
                                         setForm({...form, [key]: value})
                                     }}
                                 >
-                                    {categoryList?.map((item) => <Option key={item.id} value={item.id}>{item.name}</Option>)}
+                                    {categoryList?.map((item) => <Option key={item.id}
+                                                                         value={item.id}>{item.name}</Option>)}
                                 </Select>
                             </div>
-                            {/*<div>*/}
-                            {/*    <label htmlFor={'Tags'}>Tags</label>*/}
-                            {/*    <Select*/}
-                            {/*        style={{width:'200px'}}*/}
-                            {/*        value={form?.tags}*/}
-                            {/*        allowClear*/}
-                            {/*        name={"tags"}*/}
-                            {/*        id={'tag'}*/}
-                            {/*        className="ms-2 min-w-[200px]"*/}
-                            {/*        placeholder="Select Tags"*/}
-                            {/*        onSelect={onselectDefaultHandler}*/}
-                            {/*    >*/}
+                            <div>
+                                <label htmlFor={'brand'}>brand</label>
+                                <Select
+                                    style={{width: '200px'}}
+                                    value={form?.brand}
+                                    allowClear
+                                    name={"brand"}
+                                    id={'brand'}
+                                    className="ms-2 min-w-[200px]"
+                                    placeholder="Select brand"
+                                    onChange={(e, {key, value}) => {
+                                        setForm({...form, [key]: value})
+                                    }}
+                                >
 
-                            {/*        {*/}
-                            {/*            tags?.map((items) => (*/}
-                            {/*                <Option value={items?.id}>*/}
-                            {/*                    {items?.name}*/}
-                            {/*                </Option>*/}
-                            {/*            ))*/}
-                            {/*        }*/}
+                                    {
+                                        brands?.map((items) => (
+                                            <Option key={items?.id} value={items?.id}>
+                                                {items?.name}
+                                            </Option>
+                                        ))
+                                    }
 
-                            {/*    </Select>*/}
-                            {/*</div>*/}
+                                </Select>
+                            </div>
                             <div>
                                 <label htmlFor={'Tags'}>Tags</label>
                                 <Select
                                     mode="multiple"
-                                    style={{width:'200px'}}
+                                    style={{width: '200px'}}
                                     value={form?.tags}
                                     allowClear
                                     className="ms-2 min-w-[200px]"
@@ -250,7 +254,7 @@ const Addproduct = () => {
                                 <label htmlFor={'colors'}>Colors</label>
                                 <Select
                                     mode="multiple"
-                                    style={{width:'200px'}}
+                                    style={{width: '200px'}}
                                     value={form?.colors}
                                     allowClear
                                     className="ms-2 min-w-[200px]"
@@ -260,7 +264,10 @@ const Addproduct = () => {
                                 >
                                     {colours?.map((item) => <option value={item.id}>
                                         <div style={{
-                                            backgroundColor: item?.color, height: "15px", width: "15px", borderRadius: '100%'
+                                            backgroundColor: item?.color,
+                                            height: "15px",
+                                            width: "15px",
+                                            borderRadius: '100%'
                                         }}></div>
                                     </option>)}
                                 </Select>
