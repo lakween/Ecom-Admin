@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Table} from "antd";
 import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction";
 import {toast} from "react-toastify";
+import {Link} from "react-router-dom";
 
 const Categorylist = () => {
 
@@ -29,6 +30,9 @@ const Categorylist = () => {
       title: "CNo",
       dataIndex: "id",
       sorter: (a, b) => a.id - b.id,
+      render: (text) => (
+          <Link to={`/admin/category/${text}`}>{text}</Link>
+      ),
     },
     {
       title: "Title",
