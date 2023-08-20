@@ -132,121 +132,123 @@ const Addproduct = () => {
         return fileUrls
     }
 
-    return (<div>
-        <h3 className="mb-4 title">Add Product</h3>{
-        loading ? <div className="d-flex justify-content-center align-items-center " style={{minHeight: '70vh'}}><Spin
-                style={{minHeight: '100%', width: '100%'}}/></div> :
-            <div>
-                <div
-                    className="d-flex gap-3 flex-column"
-                >
-                    <CustomInput
-                        onChng={valueChangeHandler}
-                        type="text"
-                        label="Enter Product Title"
-                        name="title"
-                        value={form?.title}
-                    />
-                    <div className="">
-                        <ReactQuill
-                            theme="snow"
-                            value={form?.description}
-                            onChange={(value, a, b, c, d) => {
-                                setForm({...form, 'description': value})
-                            }}
+    return (
+        <div>
+            <h3 className="mb-4 title">Add Product</h3>{
+            loading ?
+                <div className="d-flex justify-content-center align-items-center " style={{minHeight: '70vh'}}><Spin
+                    style={{minHeight: '100%', width: '100%'}}/></div> :
+                <div>
+                    <div
+                        className="d-flex gap-3 flex-column"
+                    >
+                        <CustomInput
+                            onChng={valueChangeHandler}
+                            type="text"
+                            label="Enter Product Title"
+                            name="title"
+                            value={form?.title}
                         />
+                        <div className="">
+                            <ReactQuill
+                                theme="snow"
+                                value={form?.description}
+                                onChange={(value, a, b, c, d) => {
+                                    setForm({...form, 'description': value})
+                                }}
+                            />
+                        </div>
+                        <CustomInput
+                            type="number"
+                            onChng={valueChangeHandler}
+                            label="Enter Product Price"
+                            name="price"
+                            value={form?.price}
+                        />
+                        <select
+                            name="brand"
+                            onChange={(e, b) => {
+                                setForm({...form, 'brand': e.target.value})
+                            }}
+                            value={form?.brand}
+                            className="form-control py-3 mb-3"
+                            id=""
+                        >
+                            <option value="1">Select Brand</option>
+                            <option value="2">Test One Brand</option>
+                            <option value="3">Test two Barnd</option>
+                            <option value="4">Test three Band</option>
+                        </select>
+
+                        <select
+                            name="category"
+                            className="form-control py-3 mb-3"
+                            value={form?.category}
+                            onChange={(e, b) => {
+                                setForm({...form, 'category': e.target.value})
+                            }}
+                        >
+                            <option value="">Select Category</option>
+                            {categoryList?.map((item) => <option value={item.id}>{item.name}</option>)}
+                        </select>
+
+                        <select
+                            name="tags"
+                            className="form-control py-3 mb-3"
+                            id=""
+                            value={form.tags}
+                            onChange={(e, b) => {
+                                setForm({...form, 'tags': e.target.value})
+                            }}
+                        >
+                            <option value="" disabled>
+                                Select Category
+                            </option>
+
+                        </select>
+
+                        <Select
+                            mode="multiple"
+                            value={form?.colors}
+                            allowClear
+                            className="w-100"
+                            placeholder="Select colors"
+                            onDeselect={onDeselectHandler}
+                            onSelect={onselectHandler}
+                        >
+                            {colours?.map((item) => <option value={item.id}>
+                                <div style={{
+                                    backgroundColor: item?.color, height: "15px", width: "15px", borderRadius: '100%'
+                                }}></div>
+                            </option>)}
+                        </Select>
+                        <CustomInput
+                            onChng={valueChangeHandler}
+                            type="number"
+                            label="Enter Product Quantity"
+                            name="quantity"
+                            value={form?.quantity}
+                        />
+                        <Dragger {...props}>
+                            <p className="ant-upload-drag-icon">
+                                <InboxOutlined/>
+                            </p>
+                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                            <p className="ant-upload-hint">
+                                Support for a single or bulk upload. Strictly prohibited from uploading company data or
+                                other
+                                banned files.
+                            </p>
+                        </Dragger>
+                        <button
+                            onClick={onClickProductHandler}
+                            className="btn btn-success border-0 rounded-3 my-5"
+                        >
+                            {id ? 'Update Product' : 'Add Product'}
+                        </button>
                     </div>
-                    <CustomInput
-                        type="number"
-                        onChng={valueChangeHandler}
-                        label="Enter Product Price"
-                        name="price"
-                        value={form?.price}
-                    />
-                    <select
-                        name="brand"
-                        onChange={(e, b) => {
-                            setForm({...form, 'brand': e.target.value})
-                        }}
-                        value={form?.brand}
-                        className="form-control py-3 mb-3"
-                        id=""
-                    >
-                        <option value="1">Select Brand</option>
-                        <option value="2">Test One Brand</option>
-                        <option value="3">Test two Barnd</option>
-                        <option value="4">Test three Band</option>
-                    </select>
-
-                    <select
-                        name="category"
-                        className="form-control py-3 mb-3"
-                        value={form?.category}
-                        onChange={(e, b) => {
-                            setForm({...form, 'category': e.target.value})
-                        }}
-                    >
-                        <option value="">Select Category</option>
-                        {categoryList?.map((item) => <option value={item.id}>{item.name}</option>)}
-                    </select>
-
-                    <select
-                        name="tags"
-                        className="form-control py-3 mb-3"
-                        id=""
-                        value={form.tags}
-                        onChange={(e, b) => {
-                            setForm({...form, 'tags': e.target.value})
-                        }}
-                    >
-                        <option value="" disabled>
-                            Select Category
-                        </option>
-
-                    </select>
-
-                    <Select
-                        mode="multiple"
-                        value={form?.colors}
-                        allowClear
-                        className="w-100"
-                        placeholder="Select colors"
-                        onDeselect={onDeselectHandler}
-                        onSelect={onselectHandler}
-                    >
-                        {colours?.map((item) => <option value={item.id}>
-                            <div style={{
-                                backgroundColor: item?.color, height: "15px", width: "15px", borderRadius: '100%'
-                            }}></div>
-                        </option>)}
-                    </Select>
-                    <CustomInput
-                        onChng={valueChangeHandler}
-                        type="number"
-                        label="Enter Product Quantity"
-                        name="quantity"
-                        value={form?.quantity}
-                    />
-                    <Dragger {...props}>
-                        <p className="ant-upload-drag-icon">
-                            <InboxOutlined/>
-                        </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                        <p className="ant-upload-hint">
-                            Support for a single or bulk upload. Strictly prohibited from uploading company data or
-                            other
-                            banned files.
-                        </p>
-                    </Dragger>
-                    <button
-                        onClick={onClickProductHandler}
-                        className="btn btn-success border-0 rounded-3 my-5"
-                    >
-                        {id ? 'Update Product' : 'Add Product'}
-                    </button>
-                </div>
-            </div>}
-    </div>);
+                </div>}
+        </div>);
 };
 
 export default Addproduct;

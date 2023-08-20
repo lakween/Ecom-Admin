@@ -28,7 +28,7 @@ const TagList = ()=>{
             title: "SNo",
             dataIndex: "id",
             render: (text) => (
-                <Link to={`/admin/product/${text}`}>{text}</Link>
+                <Link to={`/admin/tag/${text}`}>{text}</Link>
             ),
         },
         {
