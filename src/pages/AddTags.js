@@ -3,6 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {createDocOfCollection, getDocFromCollection, updateDocOFCollection} from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import CustomInput from "../Components/CustomInput";
+import Loading from "./Loading";
 
 const AddTags = () => {
     const [form, setForm] = useState({})
@@ -36,7 +37,7 @@ const AddTags = () => {
                 toast.success('Tag successfully updated', {
                     position: toast.POSITION.BOTTOM_CENTER
                 });
-                navigate('/admin/list-category')
+                navigate('/admin/list-tag')
             }).catch(() => {
                 toast.error('Failed to Update tag', {
                     position: toast.POSITION.BOTTOM_CENTER
@@ -62,22 +63,29 @@ const AddTags = () => {
     return (
         <div>
             <h3 className="mb-4  title">
-                Add Tags
+                {
+                    id ? 'View Tag' : 'Add Tag'
+                }
             </h3>
-            <div>
-                <CustomInput
-                    onChng={valueChangeHandler}
-                    type="text"
-                    name="name"
-                    value={form?.name}
-                    label="Enter Tag"
-                    id="blogcat"
-                />
-                <button onClick={addTagHandler}
-                        className="btn btn-success border-0 rounded-3 my-5"
-                >Add Tag
-                </button>
-            </div>
+            {
+                loading ? <Loading/> : (
+                    <div>
+                        <CustomInput
+                            onChng={valueChangeHandler}
+                            type="text"
+                            name="name"
+                            value={form?.name}
+                            label="Enter Tag"
+                        />
+                        <button onClick={addTagHandler}
+                                className="btn btn-success border-0 rounded-3 my-5"
+                        >  {
+                            id ? 'Add Tag' : 'Update Tag'
+                        }
+                        </button>
+                    </div>
+                )
+            }
         </div>
     );
 }
