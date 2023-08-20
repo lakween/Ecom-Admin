@@ -5,9 +5,13 @@ import {toast} from "react-toastify";
 
 const Colorlist = () => {
     const [data, setData] = useState()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        getAllDocFromCollectionRT('color', setData)
+        setLoading(true)
+        getAllDocFromCollectionRT('color', setData).finally(() => {
+            setLoading(false)
+        })
     }, []);
 
     const columns = [
@@ -36,6 +40,7 @@ const Colorlist = () => {
     ];
 
     const onDeleteHandler = (id) => {
+        setLoading(true)
         deleteDocument('color', id).then(() => {
             toast.success('Color successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
@@ -44,13 +49,16 @@ const Colorlist = () => {
             toast.error('Failed to delete color.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
+        }).finally(() => {
+            setLoading(false)
         })
     }
     return (
         <div>
             <h3 className="mb-4 title">Colors</h3>
             <div>
-                <Table columns={columns} dataSource={data}/>
+                <Table loading={loading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
+                       dataSource={data}/>
             </div>
         </div>
     );

@@ -24,6 +24,10 @@ import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {setUserDetails} from "./store/reducers/userDetails-slice";
 import {ToastContainer} from "react-toastify";
+import AddTags from "./pages/AddTags";
+import AddBrand from "./pages/AddBrand";
+import BrandList from "./pages/BrandList";
+import TagList from "./pages/TagList";
 
 function App() {
 
@@ -52,6 +56,11 @@ function App() {
                     <Route path="list-category" element={<Categorylist/>}/>
                     <Route path="category" element={<Addcat/>}/>
                     <Route path="category/:id" element={<Addcat/>}/>
+                    <Route path="tag" element={<AddTags/>}/>
+                    <Route path="tag/:id" element={<AddTags/>}/>
+                    <Route path="list-tag" element={<TagList/>}/>
+                    <Route path="brand" element={<AddBrand/>}/>
+                    <Route path="list-brand" element={<BrandList/>}/>
                     <Route path="list-product" element={<Productlist/>}/>
                     <Route path="product" element={<Addproduct/>}>
                         <Route path=":id" element={<Addproduct/>}/>
