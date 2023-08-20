@@ -4,14 +4,19 @@ import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 
-const TagList = ()=>{
+const TagList = () => {
     const [data, setData] = useState()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        getAllDocFromCollectionRT('tag', setData)
+        setLoading(true)
+        getAllDocFromCollectionRT('tag', setData).finally(() => {
+            setLoading(false)
+        })
     }, []);
 
     const onDeleteHandler = (id) => {
+        setLoading(true)
         deleteDocument('tag', id).then(() => {
             toast.success('Tag successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
@@ -20,6 +25,8 @@ const TagList = ()=>{
             toast.error('Failed to delete tag.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
@@ -51,7 +58,8 @@ const TagList = ()=>{
         <div>
             <h3 className="mb-4 title">Tags</h3>
             <div>
-                <Table columns={columns} dataSource={data}/>
+                <Table loading={loading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
+                       dataSource={data}/>
             </div>
         </div>
     )

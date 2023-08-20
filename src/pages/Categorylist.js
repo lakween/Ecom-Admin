@@ -7,13 +7,17 @@ import {Link} from "react-router-dom";
 const Categorylist = () => {
 
     const [data, setData] = useState()
-
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        getAllDocFromCollectionRT('category', setData)
+        setLoading(true)
+        getAllDocFromCollectionRT('category', setData).finally(() => {
+            setLoading(false)
+        })
     }, []);
 
     const onDeleteHandler = (id) => {
+        setLoading(true)
         deleteDocument('category', id).then(() => {
             toast.success('category successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
@@ -22,6 +26,8 @@ const Categorylist = () => {
             toast.error('Failed to delete category.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
@@ -56,7 +62,8 @@ const Categorylist = () => {
         <div>
             <h3 className="mb-4 title">Product Categories</h3>
             <div>
-                <Table pagination={false} scroll={{x: 1500, y: 1000}} columns={columns} dataSource={data}/>
+                <Table loading={loading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
+                       dataSource={data}/>
             </div>
         </div>
     );

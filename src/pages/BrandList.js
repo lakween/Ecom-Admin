@@ -4,14 +4,19 @@ import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 
-const BrandList = ()=>{
+const BrandList = () => {
     const [data, setData] = useState()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        getAllDocFromCollectionRT('brand', setData)
+        setLoading(true)
+        getAllDocFromCollectionRT('brand', setData).finally(() => {
+            setLoading(false)
+        })
     }, []);
 
     const onDeleteHandler = (id) => {
+        setLoading(true)
         deleteDocument('brand', id).then(() => {
             toast.success('Brand successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
@@ -20,6 +25,8 @@ const BrandList = ()=>{
             toast.error('Failed to delete Brand.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
@@ -51,7 +58,8 @@ const BrandList = ()=>{
         <div>
             <h3 className="mb-4 title">Brands</h3>
             <div>
-                <Table columns={columns} dataSource={data}/>
+                <Table loading={loading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
+                       dataSource={data}/>
             </div>
         </div>
     )
