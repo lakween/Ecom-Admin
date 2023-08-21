@@ -33,10 +33,11 @@ const Profile = () => {
                 style={{width: '100%'}}
 
             >
-                <div className={'d-flex direction-row'}>
-                    <Meta description={user?.firstName || '' + user?.lastName || ''} description={user?.email}/>
-                    <Meta description={user?.mobile || ''}/>
-                    <Meta description={user?.Address || ''}/>
+                <div className={'d-flex direction-row gap-5'}>
+                    <Meta title={'Name'} description={user?.firstName || '' + user?.lastName || ''} />
+                    <Meta title={'Email'} description={user?.email}/>
+                    <Meta title={'Address'} description={user?.address || ''}/>
+                    <Meta title={'Mobile'} description={user?.mobile || ''}/>
                 </div>
 
             </Card>
