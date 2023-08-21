@@ -36,7 +36,7 @@ const Profile = () => {
                 <div className={'d-flex direction-row gap-5'}>
                     <Meta title={'Name'} description={user?.firstName || '' + user?.lastName || ''} />
                     <Meta title={'Email'} description={user?.email}/>
-                    <Meta title={'Address'} description={user?.address || ''}/>
+                    <Meta title={'Address'} style={{maxWidth:'250px'}} description={user?.address || ''}/>
                     <Meta title={'Mobile'} description={user?.mobile || ''}/>
                 </div>
 
@@ -69,7 +69,7 @@ const Profile = () => {
             <div className="row">
                 <div className="col">
                     <div className="form-floating mt-3">
-                    <TextArea className={'form-control'} placeholder={'Address'} onChange={valueChangeHandler} name={"address"} value={user?.address} rows={4}/>
+                    <TextArea className={'form-control'} placeholder={'Address'} onChange={valueChangeHandler} name={"address"} value={user?.address} rows={6}/>
                         <label htmlFor={'Address'}>Address</label>
                     </div>
                 </div>
