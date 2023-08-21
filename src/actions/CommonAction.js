@@ -143,6 +143,12 @@ export const getRefFieldOnlyFromFilter = (coll, field, filters) => {
         return array
     }
 }
+export const signOut = (navigate) => {
+    return firebase.auth().signOut().then(() => {
+        navigate("/")
+    }).catch((error) => {
+    });
+}
 
 // export const getCourseByStudent = (stID, courseID) => {
 //     const db = firebase.firestore();
