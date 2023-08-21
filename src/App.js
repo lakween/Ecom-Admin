@@ -50,6 +50,7 @@ function App() {
                         <Route path="orders" element={<Orders/>}/>
                         <Route path="order/:id" element={<ViewOrder/>}/>
                         <Route path="customers" element={<Customers/>}/>
+                        <Route path="customers/:id" element={<Customers/>}/>
                         <Route path="list-color" element={<Colorlist/>}/>
                         <Route path="color" element={<Addcolor/>}/>
                         <Route path="color/:id" element={<Addcolor/>}/>
