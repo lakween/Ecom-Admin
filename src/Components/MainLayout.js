@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {
     AiOutlineBgColors,
@@ -16,15 +16,22 @@ import {FaBloggerB, FaClipboardList} from "react-icons/fa";
 import {BiCategoryAlt} from "react-icons/bi";
 import {TbBrandZhihu} from "react-icons/tb";
 import {Layout, Menu, theme} from "antd";
+import {signOut} from "../actions/CommonAction";
+import {StoreContext} from "../providers/ContextProvider";
 
 const {Header, Sider, Content} = Layout;
 const MainLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
+    const {getValue} = useContext(StoreContext)
+    let user = getValue('user')
+    console.log(user, 'usr')
 
     const {
         token: {colorBgContainer},
     } = theme.useToken();
+
     const navigate = useNavigate();
+
     return (
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -190,15 +197,15 @@ const MainLayout = () => {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                <h5 className="mb-0">Dhanushka</h5>
-                                <p className="mb-0">iit19031@std.uwu.ac.lk</p>
+                                <h5 className="mb-0">{user?.firstName || '' + user?.lastName || ''}</h5>
+                                <p className="mb-0">{user?.email || ''}</p>
                             </div>
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li>
                                     <Link
                                         className="dropdown-item py-1 mb-1"
                                         style={{height: "auto", lineHeight: "20px"}}
-                                        to="/"
+                                        to="/admin/profile"
                                     >
                                         View Profile
                                     </Link>
@@ -207,7 +214,9 @@ const MainLayout = () => {
                                     <Link
                                         className="dropdown-item py-1 mb-1"
                                         style={{height: "auto", lineHeight: "20px"}}
-                                        to="/"
+                                        onClick={() => {
+                                            signOut(navigate)
+                                        }}
                                     >
                                         Signout
                                     </Link>
