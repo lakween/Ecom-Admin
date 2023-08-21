@@ -6,11 +6,11 @@ const ContextProvider = ({children}) => {
     const [store, setStore] = useState({});
 
     const setValue = ({path, data}) => {
-        setStore({...store,[path]:data})
+        setStore({...store, [path]: data})
     }
 
     const getValue = (path) => {
-        return  store[path]
+        return store[path]
     }
 
     return (

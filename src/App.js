@@ -1,5 +1,5 @@
 import "./App.css";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Resetpassword from "./pages/Resetpassword";
@@ -20,9 +20,7 @@ import Addcat from "./pages/Addcat";
 import Addproduct from "./pages/Addproduct";
 import ViewOrder from "./pages/ViewOrder";
 import useUserLoginInfo from "./hooks/hooks/useLoginInfo";
-import {useDispatch} from "react-redux";
 import {useContext, useEffect} from "react";
-import {setUserDetails} from "./store/reducers/userDetails-slice";
 import {ToastContainer} from "react-toastify";
 import AddTags from "./pages/AddTags";
 import AddBrand from "./pages/AddBrand";
@@ -62,6 +60,7 @@ function App() {
                         <Route path="tag/:id" element={<AddTags/>}/>
                         <Route path="list-tag" element={<TagList/>}/>
                         <Route path="brand" element={<AddBrand/>}/>
+                        <Route path="brand/:id" element={<AddBrand/>}/>
                         <Route path="list-brand" element={<BrandList/>}/>
                         <Route path="list-product" element={<Productlist/>}/>
                         <Route path="product" element={<Addproduct/>}>
@@ -89,15 +88,10 @@ function App() {
 
 const AuthProvider = () => {
     const userdetails = useUserLoginInfo()
-    const dispatch = useDispatch()
-    const {getValue, setValue} = useContext(StoreContext)
-
-    console.log(getValue('user'))
+    const {setValue} = useContext(StoreContext)
 
     useEffect(() => {
-        dispatch(setUserDetails(userdetails))
-        setValue({path:'user' , data: userdetails})
-
+        setValue({path: 'user', data: userdetails})
     }, [userdetails]);
 
     return (<></>)
