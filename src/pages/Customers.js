@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Table} from "antd";
-import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction";
+import {deleteDocument, filterDocsFromCollectionRT, getAllDocFromCollectionRT} from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 
@@ -11,7 +11,7 @@ const Customers = () => {
 
     useEffect(() => {
         setLoading(true)
-        getAllDocFromCollectionRT('userProfile', setDataCallBack).catch(() => {
+        filterDocsFromCollectionRT('userProfile', '', [['type', '==', 'user']], setDataCallBack).catch(() => {
             setLoading(false)
         })
     }, []);
@@ -53,7 +53,7 @@ const Customers = () => {
         <div>
             <h3 className="mb-4 title">Customers</h3>
             <div>
-                <Table columns={columns} dataSource={data}/>
+                <Table pagination={false} scroll={{x: 1500, y: 1000}} loading={loading} columns={columns} rowKey={'id'} dataSource={data}/>
             </div>
         </div>
     );

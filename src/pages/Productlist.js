@@ -33,7 +33,6 @@ const Productlist = () => {
             } catch (e) {
                 console.log(e)
             }
-
         }
         setData(array)
         setLoading(false)
