@@ -102,7 +102,7 @@ const Productlist = () => {
         <div>
             <h3 className="mb-4 title">Products</h3>
             <div>
-                <Table pagination={false} scroll={{x: 1500, y: 1000}} loading={loading} columns={columns}
+                <Table pagination={false} scroll={{x: 2000, y: 1000}} loading={loading} columns={columns}
                        dataSource={data}/>
             </div>
         </div>

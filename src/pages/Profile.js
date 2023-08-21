@@ -27,7 +27,7 @@ const Profile = () => {
 
     return (
         <div className={'p-10'}>
-            <Title level={2}>Update You Profile</Title>
+            <Title level={2}>Update Your Profile</Title>
             <Card
                 hoverable
                 style={{width: '100%'}}
