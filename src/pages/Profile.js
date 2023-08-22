@@ -32,6 +32,8 @@ const Profile = () => {
 
     useEffect(() => {
         setUser(currentUserData)
+        console.log(currentUserData,'currentUserData')
+        setImageUrl(currentUserData?.photoURL)
     }, [currentUserData]);
 
     const valueChangeHandler = (event) => {
@@ -41,8 +43,8 @@ const Profile = () => {
 
     const updateHandler = () => {
         setLoading(true)
-        uploadFiles.then((urls) => {
-            updateDocOFCollection('userProfile', user?.id, {...user, photoUrl: urls[0] ? urls[0] : ''}).then(() => {
+        uploadFiles().then((urls) => {
+            updateDocOFCollection('userProfile', user?.id, {...user, photoURL: urls[0] ? urls[0] : ''}).then(() => {
                 toast.success('Your profile Updated', {
                     position: toast.POSITION.BOTTOM_CENTER
                 });
