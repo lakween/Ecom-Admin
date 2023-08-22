@@ -113,7 +113,7 @@ const Profile = () => {
                     </Space>
 
                     <div className={'d-flex direction-row gap-5 ms-4'}>
-                        <Meta title={'Name'} description={user?.firstName || '' + user?.lastName || ''}/>
+                        {/*<Meta title={'Name'} description={user?.firstName || '' + user?.lastName || ''}/>*/}
                         <Meta title={'Email'} description={user?.email}/>
                         <Meta title={'Address'}
                               style={{minWidth: '300px', wordBreak: 'break-all', wordWrap: 'break-word'}}
