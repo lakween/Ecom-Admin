@@ -32,7 +32,7 @@ const Profile = () => {
 
     useEffect(() => {
         setUser(currentUserData)
-        console.log(currentUserData,'currentUserData')
+        console.log(currentUserData, 'currentUserData')
         setImageUrl(currentUserData?.photoURL)
     }, [currentUserData]);
 
@@ -108,7 +108,10 @@ const Profile = () => {
             >
                 <Space wrap size={16}>
                     <Space direction={'vertical'}>
-                        <Avatar className={'ms-4'} shape="square" size={100} src={imageUrl} icon={<UserOutlined/>}/>
+                        {
+                            imageUrl ? <Avatar className={'ms-4'} shape="square" src={imageUrl} size={100} icon={<UserOutlined/>}/> :
+                                <Avatar className={'ms-4'} shape="square" size={100} icon={<UserOutlined/>}/>
+                        }
                         <Upload {...props}>
                             <Button icon={<UploadOutlined/>}>Click to Upload</Button>
                         </Upload>
