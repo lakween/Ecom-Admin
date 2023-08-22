@@ -11,6 +11,7 @@ import type {UploadProps} from 'antd';
 import {Button, message, Upload} from 'antd';
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import {RcFile} from "antd/es/upload";
+import {object, string} from 'yup';
 
 const {Title} = Typography;
 
@@ -43,25 +44,41 @@ const Profile = () => {
 
     const updateHandler = () => {
         setLoading(true)
-        uploadFiles().then((urls) => {
-            updateDocOFCollection('userProfile', user?.id, {...user, photoURL: urls[0] ? urls[0] : ''}).then(() => {
-                toast.success('Your profile Updated', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).catch(() => {
+        updateProfileSchema.validate(user, {abortEarly: false}).then(async () => {
+
+            uploadFiles().then((urls) => {
+                updateDocOFCollection('userProfile', user?.id, {
+                    ...user,
+                    photoURL: urls[0] ? urls[0] : user?.photoURL
+                }).then(() => {
+                    toast.success('Your profile Updated', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                }).catch(() => {
+                    toast.error('Failed to update your profile', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                }).finally(() => {
+                    setLoading(false)
+                    window.location.reload()
+                })
+
+            }).catch(e => {
                 toast.error('Failed to update your profile', {
                     position: toast.POSITION.BOTTOM_CENTER
                 });
-            }).finally(() => {
                 setLoading(false)
-                window.location.reload()
             })
 
-        }).catch(e => {
-            toast.error('Failed to update your profile', {
-                position: toast.POSITION.BOTTOM_CENTER
-            });
+        }).catch((errors) => {
             setLoading(false)
+            for (let error of errors.inner) {
+                toast.error(error?.message, {
+                    position: toast.POSITION.BOTTOM_CENTER,
+                    autoClose: 5000,
+
+                });
+            }
         })
 
     }
@@ -110,7 +127,8 @@ const Profile = () => {
                 <Space wrap size={16}>
                     <Space direction={'vertical'}>
                         {
-                            imageUrl ? <Avatar className={'ms-4'} shape="square" src={imageUrl} size={100} icon={<UserOutlined/>}/> :
+                            imageUrl ? <Avatar className={'ms-4'} shape="square" src={imageUrl} size={100}
+                                               icon={<UserOutlined/>}/> :
                                 <Avatar className={'ms-4'} shape="square" size={100} icon={<UserOutlined/>}/>
                         }
                         <Upload {...props}>
@@ -184,4 +202,13 @@ const Profile = () => {
     )
 }
 
+
 export default Profile
+
+let updateProfileSchema = object({
+    firstName: string('first name is required').required('first name is required'),
+    lastName: string('last name is required').required('last name is required'),
+    mobile: string('mobile number is required').required('mobile number is required'),
+    address: string('Address is required').required('Address is required'),
+});
+
