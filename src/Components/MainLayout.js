@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
+import {MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined} from "@ant-design/icons";
 import {
     AiOutlineBgColors,
     AiOutlineDashboard,
@@ -15,7 +15,7 @@ import {IoIosNotifications} from "react-icons/io";
 import {FaBloggerB, FaClipboardList} from "react-icons/fa";
 import {BiCategoryAlt} from "react-icons/bi";
 import {TbBrandZhihu} from "react-icons/tb";
-import {Layout, Menu, theme} from "antd";
+import {Avatar, Layout, Menu, theme} from "antd";
 import {signOut} from "../actions/CommonAction";
 import {StoreContext} from "../providers/ContextProvider";
 
@@ -184,12 +184,19 @@ const MainLayout = () => {
 
                         <div className="d-flex gap-3 align-items-center dropdown">
                             <div>
-                                <img
-                                    width={32}
-                                    height={32}
-                                    src="https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-4-64x64.jpg"
-                                    alt=""
-                                />
+                                {
+                                    user?.photoURL ?
+                                        <Avatar className={'ms-4'} shape="square" src={user?.photoURL} size={35}
+                                                icon={<UserOutlined/>}/> :
+                                        <Avatar className={'ms-4'} shape="square" size={35} icon={<UserOutlined/>}/>
+                                }
+
+                                {/*<img*/}
+                                {/*    width={32}*/}
+                                {/*    height={32}*/}
+                                {/*    src=""*/}
+                                {/*    alt=""*/}
+                                {/*/>*/}
                             </div>
                             <div
                                 role="button"
@@ -234,10 +241,8 @@ const MainLayout = () => {
                     }}
                 >
                     <ToastContainer
-                        position="top-right"
-                        autoClose={250}
+                        position="bottom-center"
                         hideProgressBar={false}
-                        newestOnTop={true}
                         closeOnClick
                         rtl={false}
                         pauseOnFocusLoss

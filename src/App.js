@@ -28,6 +28,7 @@ import BrandList from "./pages/BrandList";
 import TagList from "./pages/TagList";
 import ContextProvider, {StoreContext} from "./providers/ContextProvider";
 import Profile from "./pages/Profile";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -71,18 +72,6 @@ function App() {
                         </Route>
                     </Route>
                 </Routes>
-                <ToastContainer
-                    position="bottom-center"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                />
             </Router>
         </ContextProvider>
 
