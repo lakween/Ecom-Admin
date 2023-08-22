@@ -54,6 +54,7 @@ const Profile = () => {
                 });
             }).finally(() => {
                 setLoading(false)
+                window.location.reload()
             })
 
         }).catch(e => {
