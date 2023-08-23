@@ -61,15 +61,29 @@ const AddTags = () => {
             })
 
         } else {
-            createDocOfCollection('tag', form).then(() => {
-                toast.success('Tag successfully added', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                navigate('/admin/list-tag')
-            }).catch(() => {
-                toast.error('Failed to add tag', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
+            tagSchema.validate(form, {abortEarly: false}).then(() => {
+
+                createDocOfCollection('tag', form).then(() => {
+                    toast.success('Tag successfully added', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    navigate('/admin/list-tag')
+                }).catch(() => {
+                    toast.error('Failed to add tag', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                })
+
+            }).catch((errors) => {
+                setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+
+                    });
+                }
             })
         }
     }
