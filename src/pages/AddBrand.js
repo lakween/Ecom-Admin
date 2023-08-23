@@ -4,6 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {createDocOfCollection, getDocFromCollection, updateDocOFCollection} from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import Loading from "./Loading";
+import {array, object, string} from "yup";
 
 const AddBrand = () => {
     const [form, setForm] = useState({})
@@ -33,33 +34,58 @@ const AddBrand = () => {
 
     const addBrandHandler = () => {
         if (id) {
-            setLoading(true)
-            updateDocOFCollection('brand', id, form).then(() => {
-                toast.success('Brand successfully updated', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                navigate('/admin/list-brand')
-            }).catch(() => {
-                toast.error('Failed to Update tag', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).finally(() => {
+            brandSchema.validate(form, {abortEarly: false}).then(() => {
+                setLoading(true)
+                updateDocOFCollection('brand', id, form).then(() => {
+                    toast.success('Brand successfully updated', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    navigate('/admin/list-brand')
+                }).catch(() => {
+                    toast.error('Failed to Update tag', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                }).finally(() => {
+                    setLoading(false)
+                })
+            }).catch((errors) => {
                 setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+
+                    });
+                }
             })
 
         } else {
-            setLoading(true)
-            createDocOfCollection('brand', form).then(() => {
-                toast.success('Brand successfully added', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                navigate('/admin/list-brand')
-            }).catch(() => {
-                toast.error('Failed to add brand', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).finally(() => {
+            brandSchema.validate(form, {abortEarly: false}).then(() => {
+                setLoading(true)
+                createDocOfCollection('brand', form).then(() => {
+                    toast.success('Brand successfully added', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    navigate('/admin/list-brand')
+                }).catch(() => {
+                    toast.error('Failed to add brand', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                }).finally(() => {
+                    setLoading(false)
+                })
+
+            }).catch((errors) => {
                 setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+
+                    });
+                }
             })
         }
     }
@@ -88,3 +114,7 @@ const AddBrand = () => {
 }
 
 export default AddBrand
+
+let brandSchema = object({
+    name: string('Fill the form correctly').required('Fill the form correctly')
+});

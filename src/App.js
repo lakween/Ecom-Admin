@@ -29,6 +29,7 @@ import TagList from "./pages/TagList";
 import ContextProvider, {StoreContext} from "./providers/ContextProvider";
 import Profile from "./pages/Profile";
 import 'react-toastify/dist/ReactToastify.css';
+import Order from "./pages/Order";
 
 function App() {
 
@@ -50,7 +51,6 @@ function App() {
                         <Route path="blog-category" element={<Addblogcat/>}/>
                         <Route path="blog-category/:id" element={<Addblogcat/>}/>
                         <Route path="orders" element={<Orders/>}/>
-                        <Route path="order/:id" element={<ViewOrder/>}/>
                         <Route path="customers" element={<Customers/>}/>
                         <Route path="customers/:id" element={<Customers/>}/>
                         <Route path="list-color" element={<Colorlist/>}/>
@@ -66,6 +66,7 @@ function App() {
                         <Route path="brand/:id" element={<AddBrand/>}/>
                         <Route path="list-brand" element={<BrandList/>}/>
                         <Route path="list-product" element={<Productlist/>}/>
+                        <Route path="order/:id" element={<Order/>}/>
                         <Route path="profile" element={<Profile/>}/>
                         <Route path="product" element={<Addproduct/>}>
                             <Route path=":id" element={<Addproduct/>}/>

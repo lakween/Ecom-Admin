@@ -4,13 +4,10 @@ import {Link, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 
 import firebase from "firebase/compat/app";
-import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
-import {
-    getAuth
-} from "firebase/auth";
 import {getDocFromCollection} from "../actions/CommonAction";
 
 const Login = () => {
+
     const [form, setForm] = useState({})
     const navigate = useNavigate()
     const valueChangeHandler = (event) => {
