@@ -4,6 +4,7 @@ import {createDocOfCollection, getDocFromCollection, updateDocOFCollection} from
 import {toast} from "react-toastify";
 import CustomInput from "../Components/CustomInput";
 import Loading from "./Loading";
+import {object, string} from "yup";
 
 const AddTags = () => {
     const [form, setForm] = useState({})
@@ -32,30 +33,57 @@ const AddTags = () => {
     const addTagHandler = () => {
 
         if (id) {
-            setLoading(true)
-            updateDocOFCollection('tag', id, form).then(() => {
-                toast.success('Tag successfully updated', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                navigate('/admin/list-tag')
-            }).catch(() => {
-                toast.error('Failed to Update tag', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).finally(() => {
+            tagSchema.validate(form, {abortEarly: false}).then(() => {
+                setLoading(true)
+                updateDocOFCollection('tag', id, form).then(() => {
+                    toast.success('Tag successfully updated', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    navigate('/admin/list-tag')
+                }).catch(() => {
+                    toast.error('Failed to Update tag', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                }).finally(() => {
+                    setLoading(false)
+                })
+
+            }).catch((errors) => {
                 setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+
+                    });
+                }
             })
 
         } else {
-            createDocOfCollection('tag', form).then(() => {
-                toast.success('Tag successfully added', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                navigate('/admin/list-tag')
-            }).catch(() => {
-                toast.error('Failed to add tag', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
+            tagSchema.validate(form, {abortEarly: false}).then(() => {
+
+                createDocOfCollection('tag', form).then(() => {
+                    toast.success('Tag successfully added', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    navigate('/admin/list-tag')
+                }).catch(() => {
+                    toast.error('Failed to add tag', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                })
+
+            }).catch((errors) => {
+                setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+
+                    });
+                }
             })
         }
     }
@@ -91,3 +119,7 @@ const AddTags = () => {
 }
 
 export default AddTags
+
+let tagSchema = object({
+    name: string('Fill the Form').required('Fill the Form'),
+});

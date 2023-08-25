@@ -4,6 +4,7 @@ import {createDocOfCollection, getDocFromCollection, updateDocOFCollection} from
 import {toast} from "react-toastify";
 import {useNavigate, useParams} from "react-router-dom";
 import Loading from "./Loading";
+import {array, object, string} from "yup";
 
 const Addcat = () => {
     const [form, setForm] = useState({})
@@ -33,32 +34,56 @@ const Addcat = () => {
 
         if (id) {
             setLoading(true)
-            updateDocOFCollection('category', id, form).then(() => {
-                toast.success('Category successfully updated', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                navigate('/admin/list-category')
-            }).catch(() => {
-                toast.error('Failed to Update Category', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).finally(() => {
+            categorySchema.validate(form, {abortEarly: false}).then(() => {
+                updateDocOFCollection('category', id, form).then(() => {
+                    toast.success('Category successfully updated', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    navigate('/admin/list-category')
+                }).catch(() => {
+                    toast.error('Failed to Update Category', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                }).finally(() => {
+                    setLoading(false)
+                })
+
+            }).catch((errors) => {
                 setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+                    });
+                }
             })
 
         } else {
-            setLoading(true)
-            createDocOfCollection('category', form).then(() => {
-                toast.success('Category successfully added', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-                navigate('/admin/list-category')
-            }).catch(() => {
-                toast.error('Failed to add Category', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).finally(() => {
+            categorySchema.validate(form, {abortEarly: false}).then(() => {
+
+                setLoading(true)
+                createDocOfCollection('category', form).then(() => {
+                    toast.success('Category successfully added', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                    navigate('/admin/list-category')
+                }).catch(() => {
+                    toast.error('Failed to add Category', {
+                        position: toast.POSITION.BOTTOM_CENTER
+                    });
+                }).finally(() => {
+                    setLoading(false)
+                })
+
+            }).catch((errors) => {
                 setLoading(false)
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+                    });
+                }
             })
         }
     }
@@ -92,3 +117,8 @@ const Addcat = () => {
 };
 
 export default Addcat;
+
+let categorySchema = object({
+    name: string('Fill the Form').required('Fill the Form'),
+});
+

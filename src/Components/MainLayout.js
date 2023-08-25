@@ -240,15 +240,7 @@ const MainLayout = () => {
                         background: colorBgContainer,
                     }}
                 >
-                    <ToastContainer
-                        position="bottom-center"
-                        hideProgressBar={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        theme="light"
-                    />
+
                     <Outlet/>
                 </Content>
             </Layout>

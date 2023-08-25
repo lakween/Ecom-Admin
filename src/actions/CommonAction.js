@@ -143,11 +143,77 @@ export const getRefFieldOnlyFromFilter = (coll, field, filters) => {
         return array
     }
 }
+
+export const getCountByFilter = async (coll, filters) => {
+    const db = firebase.firestore();
+    let filterArray = []
+    for (let item of filters) {
+        if (item[2] == '') {
+            continue
+        }
+        filterArray.push(where(item[0], item[1], item[2]))
+    }
+    const collRef = await collection(db, coll);
+    const queryData = await query(collRef, ...filterArray);
+    const querySnapshot = await getDocs(queryData)
+    return querySnapshot.size
+}
+
+export const getCountOfCollection = async (collName) => {
+    const db = firebase.firestore();
+    const querySnapshot = await getDocs(collection(db, collName));
+    return querySnapshot.size
+}
 export const signOut = (navigate) => {
     return firebase.auth().signOut().then(() => {
         navigate("/")
     }).catch((error) => {
     });
+}
+
+export const getChartData = (callback, setLoadingChart) => {
+    const db = firebase.firestore();
+    const orderCollection = db.collection("orders");
+    const currentYear = new Date().getFullYear();
+    const monthlyOrderCounts = [];
+
+    setLoadingChart(true)
+
+    const monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+    ];
+
+    try {
+        for (let month = 0; month < 12; month++) {
+            const {startOfMonth, endOfMonth} = getMonthRange(currentYear, month);
+            const query = orderCollection.where("timestamp", ">=", startOfMonth).where("timestamp", "<=", endOfMonth);
+            query.get().then((querySnapshot) => {
+                const orderCount = querySnapshot.size;
+                monthlyOrderCounts.push({
+                    type: monthNames[month],
+                    sales: orderCount
+                });
+                if (month === 11) {
+                    setLoadingChart(false)
+                    callback(monthlyOrderCounts)
+                }
+            }).catch((error) => {
+                console.error("Error getting orders:", error);
+            });
+        }
+
+    } catch (e) {
+        setLoadingChart(false)
+    }
+
+}
+
+function getMonthRange(year, month) {
+    const startOfMonth = new Date(year, month, 1);
+    const endOfMonth = new Date(year, month + 1, 0);
+    endOfMonth.setHours(23, 59, 59, 999);
+    return {startOfMonth, endOfMonth};
 }
 
 // export const getCourseByStudent = (stID, courseID) => {

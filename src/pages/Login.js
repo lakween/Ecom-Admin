@@ -1,18 +1,21 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import CustomInput from "../Components/CustomInput";
 import {Link, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 
 import firebase from "firebase/compat/app";
-import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
-import {
-    getAuth
-} from "firebase/auth";
 import {getDocFromCollection} from "../actions/CommonAction";
+import {StoreContext} from "../providers/ContextProvider";
 
 const Login = () => {
+
     const [form, setForm] = useState({})
     const navigate = useNavigate()
+    const {getValue} = useContext(StoreContext)
+    const uid = getValue('user')?.id
+    const type = getValue('user')?.type
+
+    if (uid && type === "admin") navigate('/admin')
     const valueChangeHandler = (event) => {
         let {name, value} = event.target
         setForm({...form, [name]: value})

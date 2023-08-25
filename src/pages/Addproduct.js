@@ -14,6 +14,7 @@ import {
 import {toast} from "react-toastify";
 import customAlerts from "../alerts";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import {array, object, string} from "yup";
 
 const {Dragger} = Upload;
 
@@ -91,39 +92,64 @@ const Addproduct = () => {
     const onClickProductHandler = () => {
         setLoading(true)
         if (id) {
-            updateDocOFCollection('product', id, form).then(() => {
-                toast.success('Updated Product successfully', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).catch(() => {
-                toast.error('Updated Product fails', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-            }).finally(() => {
-                setLoading(false)
-            })
+            productSchema.validate(form, {abortEarly: false}).then(() => {
 
-        } else {
-            setLoading(true)
-            uploadFiles().then((urls) => {
-                setLoading(true)
-                createDocOfCollection('product', {...form, "images": urls}).then(() => {
-                    setForm({})
-                    setFiles({})
-                    toast.success(customAlerts.product.success, {
+                updateDocOFCollection('product', id, form).then(() => {
+                    toast.success('Updated Product successfully', {
                         position: toast.POSITION.BOTTOM_CENTER
-                    })
-                    window.location.reload();
-                }).catch((e) => {
-                    toast.error(e, {
+                    });
+                }).catch(() => {
+                    toast.error('Updated Product fails', {
                         position: toast.POSITION.BOTTOM_CENTER
                     });
                 }).finally(() => {
                     setLoading(false)
                 })
-            }).finally(() => {
+            }).catch((errors) => {
                 setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+
+                    });
+                }
             })
+        } else {
+            setLoading(true)
+            productSchema.validate(form, {abortEarly: false}).then(() => {
+                uploadFiles().then((urls) => {
+                    setLoading(true)
+                    createDocOfCollection('product', {...form, "images": urls}).then(() => {
+                        setForm({})
+                        setFiles({})
+                        toast.success(customAlerts.product.success, {
+                            position: toast.POSITION.BOTTOM_CENTER
+                        })
+                        window.location.reload();
+                    }).catch((e) => {
+                        toast.error(e, {
+                            position: toast.POSITION.BOTTOM_CENTER
+                        });
+                    }).finally(() => {
+                        setLoading(false)
+                    })
+                }).finally(() => {
+                    setLoading(false)
+                })
+            }).catch((errors) => {
+                setLoading(false)
+                console.log(errors, 'errors')
+                for (let error of errors.inner) {
+                    toast.error(error?.message, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 5000,
+
+                    });
+                }
+            })
+
         }
     }
 
@@ -313,3 +339,13 @@ const Addproduct = () => {
 };
 
 export default Addproduct;
+
+let productSchema = object({
+    title: string('Title is required').required('Title is required'),
+    description: string('Description is required').required('Description is required'),
+    category: string('Category is required').required('Category is required'),
+    brand: string('Brand is required').required('Brand is required'),
+    colors: array().required("select at least one colour").typeError("select at least one colour").min(1, 'select at least one colour'),
+    quantity: string('Quantity is required').required('Quantity is required'),
+});
+

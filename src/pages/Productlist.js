@@ -68,6 +68,12 @@ const Productlist = () => {
             sorter: (a, b) => a.title - b.title,
         },
         {
+            title: "Quantity",
+            dataIndex: "quantity",
+            sorter: (a, b) => a.quantity - b.quantity,
+            width:150
+        },
+        {
             title: "Brand",
             dataIndex: "brand",
             sorter: (a, b) => a.brand - b.brand,
@@ -85,6 +91,7 @@ const Productlist = () => {
             title: "Price(LKR)",
             dataIndex: "price",
             sorter: (a, b) => a.price - b.price,
+            width:150
         },
         {
             title: "Action",
