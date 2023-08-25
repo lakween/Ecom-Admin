@@ -28,6 +28,10 @@ const columns = [
         dataIndex: "email",
     },
     {
+        title: "Status",
+        dataIndex: "payStatus",
+    },
+    {
         title: "Date",
         dataIndex: "timestamp",
         render: (text) => {
