@@ -4,28 +4,74 @@ import {Spin, Table} from "antd";
 import {
     filterDocsFromCollection,
     getAllDocFromCollection,
+    getChartData,
     getCountByFilter,
     getCountOfCollection
 } from "../actions/CommonAction";
+import Loading from "./Loading";
+import {Link} from "react-router-dom";
 
 const columns = [
     {
-        title: "SNo",
-        dataIndex: "key",
+        title: "id",
+        dataIndex: "id",
+        render: (text) => (
+            <Link to={`/admin/order/${text}`}>{text}</Link>
+        ),
     },
     {
-        title: "Name",
-        dataIndex: "name",
+        title: "User ID",
+        dataIndex: "userID",
     },
     {
-        title: "Product",
-        dataIndex: "product",
+        title: "First Name",
+        dataIndex: "firstName",
     },
     {
-        title: "Status",
-        dataIndex: "staus",
+        title: "Last Name",
+        dataIndex: "lastName",
+    },
+    {
+        title: "Email",
+        dataIndex: "email",
+    },
+    {
+        title: "Date",
+        dataIndex: "timestamp",
+        render: (text) => {
+            const seconds = text.seconds;
+            const milliseconds = text.nanoseconds / 1000000;
+            const timestampInMillis = seconds * 1000 + milliseconds;
+            const date = new Date(timestampInMillis);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            const period = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = String(hours % 12 || 12).padStart(2, '0');
+
+            const formattedDate = `${day}/${month}/${year} ${formattedHours}:${minutes} ${period}`;
+
+            return (
+                <div>
+                    {formattedDate}
+                </div>
+            )
+        },
+    },
+    {
+        title: "Total",
+        dataIndex: "price",
+        render: (text) => (
+            <div>
+                {text + ' ' + 'LKR'}
+            </div>
+        )
     },
 ];
+
 const data1 = [];
 for (let i = 0; i < 46; i++) {
     data1.push({
@@ -37,10 +83,15 @@ for (let i = 0; i < 46; i++) {
 }
 const Dashboard = () => {
     const [data, setData] = useState({})
+    const [chartData, setChartData] = useState([])
     const [loading, setLoading] = useState(false)
+    const [loadingChart, setLoadingChart] = useState(false)
+    const [todayOrders, setTodayOrders] = useState([])
 
     useEffect(() => {
         getDashboardData()
+        getChartData(setChartData, setLoadingChart)
+        getTodayOrders()
     }, []);
 
     const getDashboardData = async () => {
@@ -70,60 +121,19 @@ const Dashboard = () => {
 
     }
 
-    console.log(data, 'data')
+    const getTodayOrders = async () => {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
 
-    const abc = [
-        {
-            type: "Jan",
-            sales: 38,
-        },
-        {
-            type: "Feb",
-            sales: 52,
-        },
-        {
-            type: "Mar",
-            sales: 61,
-        },
-        {
-            type: "Apr",
-            sales: 145,
-        },
-        {
-            type: "May",
-            sales: 48,
-        },
-        {
-            type: "Jun",
-            sales: 38,
-        },
-        {
-            type: "July",
-            sales: 38,
-        },
-        {
-            type: "Aug",
-            sales: 38,
-        },
-        {
-            type: "Sept",
-            sales: 38,
-        },
-        {
-            type: "Oct",
-            sales: 38,
-        },
-        {
-            type: "Nov",
-            sales: 38,
-        },
-        {
-            type: "Dec",
-            sales: 38,
-        },
-    ];
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999)
+
+        const todayOrders = await filterDocsFromCollection('orders', '',[['timestamp', '>=', currentDate], ['timestamp', '<=', endOfDay]])
+        setTodayOrders(todayOrders)
+    }
+
     const config = {
-        data: abc,
+        data: chartData,
         xField: "type",
         yField: "sales",
         color: ({type}) => {
@@ -201,13 +211,16 @@ const Dashboard = () => {
             <div className="mt-4">
                 <h3 className="mb-5 title">Income Statics</h3>
                 <div>
-                    <Column {...config} />
+                    {
+                        loadingChart ? <Loading/> : <Column {...config} />
+                    }
+
                 </div>
             </div>
             <div className="mt-4">
-                <h3 className="mb-5 title">Recent Orders</h3>
+                <h3 className="mb-5 title">Today Orders</h3>
                 <div>
-                    <Table columns={columns} dataSource={data1}/>
+                    <Table columns={columns} dataSource={todayOrders}/>
                 </div>
             </div>
         </div>

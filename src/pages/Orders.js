@@ -62,11 +62,6 @@ const columns = [
             </div>
         )
     },
-
-    {
-        title: "Action",
-        dataIndex: "action",
-    },
 ];
 
 const data1 = [];

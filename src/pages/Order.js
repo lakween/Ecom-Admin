@@ -53,10 +53,10 @@ const Order = () => {
     return (
         <div className="py-5 h-100">
             <div className="card mb-3">
-                <div className="card-header px-4 py-5">
-                    <h5 className="text-muted mb-0">Thanks for your Order, <span
-                    >{order?.firstName + ' ' + order?.lastName}</span>!</h5>
-                </div>
+                {/*<div className="card-header px-4 py-5">*/}
+                {/*    <h5 className="text-muted mb-0">Thanks for your Order, <span*/}
+                {/*    >{order?.firstName + ' ' + order?.lastName}</span>!</h5>*/}
+                {/*</div>*/}
             </div>
             <div className={'mb-3'}>
                 <Table pagination={false} scroll={{x: 2000, y: 1000}} columns={columns}
