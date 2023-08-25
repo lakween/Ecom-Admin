@@ -25,9 +25,9 @@ const Customers = () => {
         {
             title: "Sno",
             dataIndex: "id",
-            render: (text) => (
-                <Link to={`/admin/customer/${text}`}>{text}</Link>
-            ),
+            // render: (text) => (
+            //     <Link to={`/admin/customer/${text}`}>{text}</Link>
+            // ),
         },
         {
             title: "First Name",
