@@ -143,6 +143,27 @@ export const getRefFieldOnlyFromFilter = (coll, field, filters) => {
         return array
     }
 }
+
+export const getCountByFilter = async (coll,filters)=>{
+    const db = firebase.firestore();
+    let filterArray = []
+    for (let item of filters) {
+        if (item[2] == '') {
+            continue
+        }
+        filterArray.push(where(item[0], item[1], item[2]))
+    }
+    const collRef = await collection(db, coll);
+    const queryData = await query(collRef, ...filterArray);
+    const querySnapshot = await getDocs(queryData)
+    return querySnapshot.size
+}
+
+export const getCountOfCollection = async (collName)=>{
+    const db = firebase.firestore();
+    const querySnapshot = await getDocs(collection(db, collName));
+    return querySnapshot.size
+}
 export const signOut = (navigate) => {
     return firebase.auth().signOut().then(() => {
         navigate("/")
