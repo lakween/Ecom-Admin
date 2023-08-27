@@ -1,7 +1,9 @@
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {getDocFromCollection} from "../actions/CommonAction";
-import {Table} from "antd";
+import {Select, Table} from "antd";
+
+const {Option} = Select
 
 const columns = [
     {
@@ -32,13 +34,22 @@ const columns = [
     {
         title: "Total",
         dataIndex: "price",
+        render: (text) => (
+            <div>
+                {text?.toLocaleString('en-US', {
+                    style: 'decimal',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })} LKR
+            </div>
+        ),
     },
 ];
 const Order = () => {
     let {id} = useParams()
     const [order, setOrder] = useState()
 
-    console.log(order,'order')
+    console.log(order, 'order')
 
     useEffect(() => {
         if (id) getOrder()
@@ -66,17 +77,6 @@ const Order = () => {
             </div>
             <div className="card">
                 <div className="card-body p-4 mt-5">
-                    {/*<div className="d-flex justify-content-between align-items-center mb-4">*/}
-                    {/*    <p className="lead fw-normal mb-0">Address</p>*/}
-                    {/*    <p className="small text-muted mb-0">{*/}
-                    {/*        order?.address*/}
-                    {/*    }</p>*/}
-                    {/*</div>*/}
-
-                    <div className="d-flex justify-content-between pt-2">
-                        <p className="fw-bold mb-0">Order Details</p>
-                        <p className="text-muted mb-0"><span className="fw-bold me-4">Total</span> $898.00</p>
-                    </div>
 
                     <div className="d-flex justify-content-between pt-2">
                         <p className="text-muted mb-0">Order Number</p>
@@ -85,25 +85,23 @@ const Order = () => {
 
                     <div className="d-flex justify-content-between">
                         <p className="text-muted mb-0">Total</p>
-                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.price} LKR</p>
+                        <p className="text-muted mb-0"><span
+                            className="fw-bold me-4"></span>{order?.price.toLocaleString('en-US', {
+                            style: 'decimal',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })} LKR</p>
                     </div>
 
                     <div className="d-flex justify-content-between mb-5">
-                        <p className="text-muted mb-0">status</p>
+                        <p className="text-muted mb-0">Status</p>
                         <p className="text-muted mb-0"><span
                             className="fw-bold me-4"></span> {order?.payStatus}</p>
                     </div>
                 </div>
             </div>
-            <div className="card">
+            <div className="card mt-3">
                 <div className="card-body p-4 mt-5">
-                    {/*<div className="d-flex justify-content-between align-items-center mb-4">*/}
-                    {/*    <p className="lead fw-normal mb-0">Address</p>*/}
-                    {/*    <p className="small text-muted mb-0">{*/}
-                    {/*        order?.address*/}
-                    {/*    }</p>*/}
-                    {/*</div>*/}
-
                     <div className="d-flex justify-content-between pt-2">
                         <p className="fw-bold mb-0">Shipping Details</p>
                         <p className="text-muted mb-0"><span className="fw-bold me-4"></span></p>
@@ -135,9 +133,57 @@ const Order = () => {
                     </div>
 
                     <div className="d-flex justify-content-between mb-5">
-                        <p className="text-muted mb-0">status</p>
-                        <p className="text-muted mb-0"><span
-                            className="fw-bold me-4"></span> {order?.payStatus}</p>
+                        <p className="text-muted mb-0">Shipping Status</p>
+                        <div>
+                            <Select
+                                style={{width: '200px'}}
+                                value={order?.shippingStatus}
+                                allowClear
+                                name={"shippingStatus"}
+                                id={'shippingStatus'}
+                                className="ms-2 min-w-[200px]"
+                                placeholder="Shipping Status"
+                                onChange={(e, {key, value}) => {
+                                    setOrder({...order, shippingStatus: value})
+                                }}
+                            >
+                                <Option key={'Shipped'} value={'Shipped'}>
+                                    Shipped
+                                </Option>
+                                <Option key={'Shipped'} value={'Shipped'}>
+                                    Pending
+                                </Option>
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="card mt-3">
+                <div className="card-body p-4 mt-5">
+                    <div className="d-flex justify-content-between pt-2">
+                        <p className="fw-bold mb-0">Customer Details</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span></p>
+                    </div>
+
+                    <div className="d-flex justify-content-between pt-2">
+                        <p className="text-muted mb-0">Address</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.address}</p>
+                    </div>
+
+                    <div className="d-flex justify-content-between">
+                        <p className="text-muted mb-0">First name</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.firstName}</p>
+                    </div>
+
+                    <div className="d-flex justify-content-between">
+                        <p className="text-muted mb-0">Last Name</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.lastName} </p>
+                    </div>
+
+                    <div className="d-flex justify-content-between">
+                        <p className="text-muted mb-0">email</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.email} </p>
                     </div>
                 </div>
             </div>
