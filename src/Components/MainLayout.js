@@ -124,38 +124,38 @@ const MainLayout = () => {
                             icon: <FaClipboardList className="fs-4"/>,
                             label: "Orders",
                         },
-                        {
-                            key: "blogs",
-                            icon: <FaBloggerB className="fs-4"/>,
-                            label: "Blogs",
-                            children: [
-                                {
-                                    key: "blog",
-                                    icon: <ImBlog className="fs-4"/>,
-                                    label: "Add Blog",
-                                },
-                                {
-                                    key: "blog-list",
-                                    icon: <FaBloggerB className="fs-4"/>,
-                                    label: "Blog List",
-                                },
-                                {
-                                    key: "blog-category",
-                                    icon: <ImBlog className="fs-4"/>,
-                                    label: "Add Blog Category",
-                                },
-                                {
-                                    key: "blog-category-list",
-                                    icon: <FaBloggerB className="fs-4"/>,
-                                    label: "Blog Category List",
-                                },
-                            ],
-                        },
-                        {
-                            key: "enquiries",
-                            icon: <FaClipboardList className="fs-4"/>,
-                            label: "Enquiries",
-                        },
+                        // {
+                        //     key: "blogs",
+                        //     icon: <FaBloggerB className="fs-4"/>,
+                        //     label: "Blogs",
+                        //     children: [
+                        //         {
+                        //             key: "blog",
+                        //             icon: <ImBlog className="fs-4"/>,
+                        //             label: "Add Blog",
+                        //         },
+                        //         {
+                        //             key: "blog-list",
+                        //             icon: <FaBloggerB className="fs-4"/>,
+                        //             label: "Blog List",
+                        //         },
+                        //         {
+                        //             key: "blog-category",
+                        //             icon: <ImBlog className="fs-4"/>,
+                        //             label: "Add Blog Category",
+                        //         },
+                        //         {
+                        //             key: "blog-category-list",
+                        //             icon: <FaBloggerB className="fs-4"/>,
+                        //             label: "Blog Category List",
+                        //         },
+                        //     ],
+                        // },
+                        // {
+                        //     key: "enquiries",
+                        //     icon: <FaClipboardList className="fs-4"/>,
+                        //     label: "Enquiries",
+                        // },
                     ]}
                 />
             </Sider>
