@@ -38,6 +38,8 @@ const Order = () => {
     let {id} = useParams()
     const [order, setOrder] = useState()
 
+    console.log(order,'order')
+
     useEffect(() => {
         if (id) getOrder()
     }, [id]);
@@ -64,12 +66,12 @@ const Order = () => {
             </div>
             <div className="card">
                 <div className="card-body p-4 mt-5">
-                    <div className="d-flex justify-content-between align-items-center mb-4">
-                        <p className="lead fw-normal mb-0">Address</p>
-                        <p className="small text-muted mb-0">{
-                            order?.address
-                        }</p>
-                    </div>
+                    {/*<div className="d-flex justify-content-between align-items-center mb-4">*/}
+                    {/*    <p className="lead fw-normal mb-0">Address</p>*/}
+                    {/*    <p className="small text-muted mb-0">{*/}
+                    {/*        order?.address*/}
+                    {/*    }</p>*/}
+                    {/*</div>*/}
 
                     <div className="d-flex justify-content-between pt-2">
                         <p className="fw-bold mb-0">Order Details</p>
@@ -77,26 +79,66 @@ const Order = () => {
                     </div>
 
                     <div className="d-flex justify-content-between pt-2">
-                        <p className="text-muted mb-0">Invoice Number : 788152</p>
-                        <p className="text-muted mb-0"><span className="fw-bold me-4">Discount</span> $19.00</p>
+                        <p className="text-muted mb-0">Order Number</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{id}</p>
                     </div>
 
                     <div className="d-flex justify-content-between">
-                        <p className="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
-                        <p className="text-muted mb-0"><span className="fw-bold me-4">GST 18%</span> 123</p>
+                        <p className="text-muted mb-0">Total</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.price} LKR</p>
                     </div>
 
                     <div className="d-flex justify-content-between mb-5">
-                        <p className="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
+                        <p className="text-muted mb-0">status</p>
                         <p className="text-muted mb-0"><span
-                            className="fw-bold me-4">Delivery Charges</span> Free</p>
+                            className="fw-bold me-4"></span> {order?.payStatus}</p>
                     </div>
                 </div>
             </div>
             <div className="card">
-                <div className="card-footer border-0 px-4 py-5">
-                    <h5 className="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-                        paid: <span className="h2 mb-0 ms-2">$1040</span></h5>
+                <div className="card-body p-4 mt-5">
+                    {/*<div className="d-flex justify-content-between align-items-center mb-4">*/}
+                    {/*    <p className="lead fw-normal mb-0">Address</p>*/}
+                    {/*    <p className="small text-muted mb-0">{*/}
+                    {/*        order?.address*/}
+                    {/*    }</p>*/}
+                    {/*</div>*/}
+
+                    <div className="d-flex justify-content-between pt-2">
+                        <p className="fw-bold mb-0">Shipping Details</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span></p>
+                    </div>
+
+                    <div className="d-flex justify-content-between pt-2">
+                        <p className="text-muted mb-0">Address</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.address}</p>
+                    </div>
+
+                    <div className="d-flex justify-content-between">
+                        <p className="text-muted mb-0">Zipcode</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.zipCode}</p>
+                    </div>
+
+                    <div className="d-flex justify-content-between">
+                        <p className="text-muted mb-0">City</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.city} </p>
+                    </div>
+
+                    <div className="d-flex justify-content-between">
+                        <p className="text-muted mb-0">District</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.district} </p>
+                    </div>
+
+                    <div className="d-flex justify-content-between">
+                        <p className="text-muted mb-0">Province</p>
+                        <p className="text-muted mb-0"><span className="fw-bold me-4"></span>{order?.province} </p>
+                    </div>
+
+                    <div className="d-flex justify-content-between mb-5">
+                        <p className="text-muted mb-0">status</p>
+                        <p className="text-muted mb-0"><span
+                            className="fw-bold me-4"></span> {order?.payStatus}</p>
+                    </div>
                 </div>
             </div>
         </div>
