@@ -119,6 +119,13 @@ export const updateDocOFCollection = async (coll, document, data) => {
     const docRef = await setDoc(doc(db, coll, document), data);
 }
 
+export const updateOnlyFieldDocOFCollection = async (coll, document, data) => {
+    const db = firebase.firestore();
+    const itemRef = db.collection(coll).doc(document);
+    await itemRef.update(data)
+}
+
+
 export const getRefFieldOnlyFromFilter = (coll, field, filters) => {
     return async (dispatch) => {
 
