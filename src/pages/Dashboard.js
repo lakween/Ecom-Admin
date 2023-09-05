@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {Column} from "@ant-design/plots";
-import {Spin, Table} from "antd";
+import React, { useEffect, useState } from "react";
+import { Column } from "@ant-design/plots";
+import { Spin, Table } from "antd";
 import {
     filterDocsFromCollection,
     getAllDocFromCollection,
@@ -9,7 +9,7 @@ import {
     getCountOfCollection
 } from "../actions/CommonAction";
 import Loading from "./Loading";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const columns = [
     {
@@ -128,7 +128,7 @@ const Dashboard = () => {
         const endOfDay = new Date();
         endOfDay.setHours(23, 59, 59, 999)
 
-        const todayOrders = await filterDocsFromCollection('orders', '',[['timestamp', '>=', currentDate], ['timestamp', '<=', endOfDay]])
+        const todayOrders = await filterDocsFromCollection('orders', '', [['timestamp', '>=', currentDate], ['timestamp', '<=', endOfDay]])
         setTodayOrders(todayOrders)
     }
 
@@ -136,7 +136,7 @@ const Dashboard = () => {
         data: chartData,
         xField: "type",
         yField: "sales",
-        color: ({type}) => {
+        color: ({ type }) => {
             return "#ffd333";
         },
         label: {
@@ -163,47 +163,50 @@ const Dashboard = () => {
     };
     return (
         <div>
-            <h3 className="mb-4 title">Dashboard</h3>
+            <div className="border rounded p-3 animation-form mb-3">
+                <h3 className=" text-2xl font-medium">Dashboard</h3>
+            </div>
+
             <div className="d-flex justify-content-between align-items-center gap-3">
-                <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
+                <div className="d-flex border rounded justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
                     <div>
                         <p className="desc">Total Customers</p>
-                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small"/></h4> :
-                            <h4 className="mb-0 sub-title">{data?.totalCustomers}</h4>
+                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small" /></h4> :
+                            <h4 className="mb-0 font-medium sub-title text-2xl">{data?.totalCustomers}</h4>
                         }
                     </div>
                 </div>
-                <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
+                <div className="d-flex border rounded justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
                     <div>
                         <p className="desc">Total Products</p>
 
-                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small"/></h4> :
-                            <h4 className="mb-0 sub-title">{data?.totalProducts}</h4>
+                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small" /></h4> :
+                            <h4 className="mb-0 font-medium text-2xl">{data?.totalProducts}</h4>
                         }
                     </div>
                 </div>
-                <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
+                <div className="d-flex border rounded justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
                     <div>
                         <p className="desc">Total Sales Today</p>
-                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small"/></h4> :
-                            <h4 className="mb-0 sub-title">{data?.totalsalesToday || 0.00}</h4>
+                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small" /></h4> :
+                            <h4 className="mb-0 font-medium text-2xl sub-title">{data?.totalsalesToday || 0.00}</h4>
                         }
 
                     </div>
                 </div>
-                <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
+                <div className="d-flex border rounded justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
                     <div>
                         <p className="desc">Total Income</p>
-                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small"/></h4> :
-                            <h4 className="mb-0 sub-title">{data?.totalIncome?.toFixed(2) || 0.00} LKR</h4>
+                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small" /></h4> :
+                            <h4 className="mb-0  font-medium text-2xl sub-title">{data?.totalIncome?.toFixed(2) || 0.00} LKR</h4>
                         }
                     </div>
                 </div>
-                <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
+                <div className="d-flex  border roundedjustify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
                     <div>
                         <p className="desc">Total Income Today</p>
-                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small"/></h4> :
-                            <h4 className="mb-0 sub-title">{data?.totalIncomeToday?.toFixed(2) || 0.00} LKR</h4>
+                        {loading ? <h4 className="mb-0 sub-title"><Spin size="small" /></h4> :
+                            <h4 className="mb-0 font-medium text-2xl  sub-title">{data?.totalIncomeToday?.toFixed(2) || 0.00} LKR</h4>
                         }
                     </div>
                 </div>
@@ -212,7 +215,7 @@ const Dashboard = () => {
                 <h3 className="mb-5 title">Income Statics</h3>
                 <div>
                     {
-                        loadingChart ? <Loading/> : <Column {...config} />
+                        loadingChart ? <Loading /> : <Column {...config} />
                     }
 
                 </div>
@@ -220,7 +223,7 @@ const Dashboard = () => {
             <div className="mt-4">
                 <h3 className="mb-5 title">Today Orders</h3>
                 <div>
-                    <Table columns={columns} dataSource={todayOrders}/>
+                    <Table columns={columns} dataSource={todayOrders} />
                 </div>
             </div>
         </div>
