@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {Button, Table} from "antd";
-import {deleteDocument, filterDocsFromCollectionRT, getAllDocFromCollectionRT} from "../actions/CommonAction";
-import {toast} from "react-toastify";
-import {Link} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Button, Table } from "antd";
+import { deleteDocument, filterDocsFromCollectionRT, getAllDocFromCollectionRT } from "../actions/CommonAction";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 
 const Customers = () => {
@@ -51,9 +51,12 @@ const Customers = () => {
 
     return (
         <div>
-            <h3 className="mb-4 title">Customers</h3>
-            <div>
-                <Table pagination={false} scroll={{x: 1500, y: 1000}} loading={loading} columns={columns} rowKey={'id'} dataSource={data}/>
+             <div className="border rounded p-3 animation-form mb-3">
+                <h3 className=" text-2xl font-medium">Customers</h3>
+            </div>
+
+            <div className="">
+                <Table className=" border rounded p-3" pagination={false} scroll={{ x: 1500, y: 1500 }} loading={loading} columns={columns} rowKey={'id'} dataSource={data} />
             </div>
         </div>
     );

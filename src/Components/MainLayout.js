@@ -60,7 +60,7 @@ const MainLayout = () => {
         <Layout>
             <Sider style={{ backgroundColor: '#e4e4f5' }} trigger={null} collapsible collapsed={collapsed}>
                 <div className='flex justify-center items-center w-full'>
-                    <img  style={{ backgroundColor: "#e4e4f5", width: '150px', height: '100px' }} src={logoNew} />
+                    <img style={{ backgroundColor: "#e4e4f5", width: '150px', height: '100px' }} src={logoNew} />
 
                 </div>
                 <Menu
@@ -151,8 +151,8 @@ const MainLayout = () => {
                 />
             </Sider>
             <Layout>
-                <Header className=' bg-slate-50 px-0'  >
-                    <div className="flex justify-between align-items-center">
+                <Header className=' bg-slate-50 px-0 !border-slate-200  !z-[10000]'  >
+                    <div className="flex justify-between  bg-slate-50 px-0 !border-slate-200 !border-b-[1px] items-center">
                         <Button
                             type="text"
                             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -164,12 +164,6 @@ const MainLayout = () => {
                             }}
 
                         />
-                        {/* <div className="position-relative">
-                            <IoIosNotifications className="fs-4" />
-                            <span className="badge bg-warning rounded-circle p-1 position-absolute">
-                                3
-                            </span>
-                        </div> */}
 
                         <div className="d-flex gap-3 align-items-center px-5 dropdown">
                             <div>
@@ -180,12 +174,6 @@ const MainLayout = () => {
                                         <Avatar className={'ms-4'} shape="square" size={35} icon={<UserOutlined />} />
                                 }
 
-                                {/*<img*/}
-                                {/*    width={32}*/}
-                                {/*    height={32}*/}
-                                {/*    src=""*/}
-                                {/*    alt=""*/}
-                                {/*/>*/}
                             </div>
                             <div
                                 role="button"
@@ -222,15 +210,11 @@ const MainLayout = () => {
                     </div>
                 </Header>
                 <Content
-                    style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                        minHeight: 280,
-                        background: colorBgContainer,
-                    }}
+                    className=' !bg-white !p-5'
                 >
                     <Outlet />
                 </Content>
+                <Footer className=' bg-slate-100 px-0 border-t-1' style={{ textAlign: 'center' }}>Swingtech ©2023 Created by Swingtech</Footer>
             </Layout>
         </Layout>
     );
