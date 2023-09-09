@@ -214,7 +214,7 @@ const MainLayout = () => {
                 >
                     <Outlet />
                 </Content>
-                <Footer className=' bg-slate-100 px-0 border-t-1' style={{ textAlign: 'center' }}>Swingtech ©2023 Created by Swingtech</Footer>
+                <Footer className=' bg-slate-50 px-0 border-t-2' style={{ textAlign: 'center' }}>Swingtech ©2023 Created by Swingtech</Footer>
             </Layout>
         </Layout>
     );
