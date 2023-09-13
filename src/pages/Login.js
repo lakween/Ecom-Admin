@@ -6,8 +6,21 @@ import { toast } from "react-toastify";
 import firebase from "firebase/compat/app";
 import { getDocFromCollection } from "../actions/CommonAction";
 import { StoreContext } from "../providers/ContextProvider";
+import { get } from '../service/api.service'
+
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+    QueryClient,
+    QueryClientProvider,
+  } from 'react-query'
 
 const Login = () => {
+
+    const query = useQuery('todos', get)
+
+    console.log(query,'quer');
 
     const [form, setForm] = useState({})
     const navigate = useNavigate()

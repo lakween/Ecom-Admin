@@ -30,10 +30,20 @@ import ContextProvider, {StoreContext} from "./providers/ContextProvider";
 import Profile from "./pages/Profile";
 import 'react-toastify/dist/ReactToastify.css';
 import Order from "./pages/Order";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
+
+const queryClient = new QueryClient()
 
 function App() {
 
     return (
+      <QueryClientProvider client={queryClient}>
         <ContextProvider>
             <Router>
                 <AuthProvider/>
@@ -75,7 +85,7 @@ function App() {
                 </Routes>
             </Router>
         </ContextProvider>
-
+        </QueryClientProvider>
     );
 }
 
