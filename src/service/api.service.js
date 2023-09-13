@@ -1,7 +1,12 @@
 import axios from "axios";
 
-const baseUrl = "https://jsonplaceholder.typicode.com/posts"
+const baseUrl = "http://localhost:8080"
 
-export const get = async ({body={},api})=>{
-   return await axios.get(baseUrl+'/'+api)
+export const post = async ({ body = {}, api }) => {
+   try {
+      const res = await axios.post(baseUrl + '/' + api, body)
+      return res
+   } catch (e) {
+      throw e
+   }
 }

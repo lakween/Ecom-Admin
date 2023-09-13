@@ -1,52 +1,45 @@
 import React, { useContext, useState } from "react";
-import CustomInput from "../Components/CustomInput";
 import { Link, useNavigate } from "react-router-dom";
+import CustomInput from "../Components/CustomInput";
 import { toast } from "react-toastify";
-
-import firebase from "firebase/compat/app";
-import { getDocFromCollection } from "../actions/CommonAction";
 import { StoreContext } from "../providers/ContextProvider";
-import { get } from '../service/api.service'
+import { post } from '../service/api.service';
 
 import {
-    useQuery,
-    useMutation,
-    useQueryClient,
-    QueryClient,
-    QueryClientProvider,
-  } from 'react-query'
+    useMutation
+} from 'react-query';
 
 const Login = () => {
 
-    const query = useQuery('todos', get)
-
-    console.log(query,'quer');
+    // const mutation = useMutation(post, {
+    //     onSuccess: (data) => {
+    //        console.log(error,'data');
+    //       },
+    //     onError:(error)=>{
+    //         console.log(error.message,'data');
+    //     }
+    //   })
 
     const [form, setForm] = useState({})
     const navigate = useNavigate()
-    const { getValue } = useContext(StoreContext)
-    const uid = getValue('user')?.id
-    const type = getValue('user')?.type
 
-    if (uid && type === "admin") navigate('/admin')
     const valueChangeHandler = (event) => {
         let { name, value } = event.target
         setForm({ ...form, [name]: value })
     }
-    const login = async () => {
-        try {
-            let res = await firebase.auth().signInWithEmailAndPassword(form?.email, form?.password)
-            const user = await getDocFromCollection('userProfile', res.user.uid)
-            if (user.type == 'admin') navigate('/admin')
-            else toast.error('You are not Admin', {
+    const login = () => {
+        // mutation.mutate({body:{
+        //     userName:'lakween',
+        //     password:'lakween1996'
+        // },api:'login'})
+        post({body:form,api:'login'}).then((data)=>{
+            navigate('/admin')
+        }).catch((e)=>{
+            console.log(e)
+            toast.error(e.response.data.error, {
                 position: toast.POSITION.BOTTOM_CENTER
             });
-
-        } catch (e) {
-            toast.error(JSON.parse(JSON.stringify(e.code)), {
-                position: toast.POSITION.BOTTOM_CENTER
-            });
-        }
+        })
     }
 
     return (
