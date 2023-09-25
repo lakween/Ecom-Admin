@@ -4,10 +4,7 @@ import CustomInput from "../Components/CustomInput";
 import { toast } from "react-toastify";
 import { StoreContext } from "../providers/ContextProvider";
 import { post } from '../service/api.service';
-
-import {
-    useMutation
-} from 'react-query';
+import {useMutation} from 'react-query';
 
 const Login = () => {
 
@@ -28,18 +25,21 @@ const Login = () => {
         setForm({ ...form, [name]: value })
     }
     const login = () => {
-        // mutation.mutate({body:{
-        //     userName:'lakween',
-        //     password:'lakween1996'
-        // },api:'login'})
-        post({body:form,api:'login'}).then((data)=>{
+        post({ body: form, api: 'login' }).then((response) => {
+            const bearerToken =  response.headers.get('Authorization')
+            sessionStorage.setItem('bearerToken',bearerToken)
             navigate('/admin')
-        }).catch((e)=>{
+        }).catch((e) => {
             console.log(e)
             toast.error(e.response.data.error, {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         })
+
+        // mutation.mutate({body:{
+        //     userName:'lakween',
+        //     password:'lakween1996'
+        // },api:'login'})
     }
 
     return (
@@ -56,36 +56,38 @@ const Login = () => {
                                 alt="Sample image" />
                         </div>
 
-                        <div className="w-full align-middle px-60 py-20 border-amber-50 border rounded-md bg-slate-100">
-                            <p className="text-center">Login to your account to continue.</p>
-                            <CustomInput
-                                onChng={valueChangeHandler}
-                                type="text"
-                                label="Email Address"
-                                id="email"
-                                name="email"
-                            />
-                            <CustomInput
-                                onChng={valueChangeHandler}
-                                type="password"
-                                label="Password"
-                                id="pass"
-                                name="password"
-                            />
-                            <div className="mb-3 text-end">
-                                <Link to="forgot-password" className="">
-                                    Forgot Password?
-                                </Link>
-                            </div>
-                            <div className="w-full grid place-items-center">
-                                <button onClick={login}
-                                    className="bg-blue-500 hover:bg-blue-600 w-[300px] py-2 rounded-md"
-                                    type="submit"> Login
-                                </button>
+                        <div className="w-full align-middle px- py-10 border-amber-50 border rounded-md bg-slate-100">
+                            <div className="px-40">
+                                <p className="text-center">Login to your account to continue.</p>
+                                <CustomInput
+                                    onChng={valueChangeHandler}
+                                    type="text"
+                                    label="Email Address"
+                                    id="userName"
+                                    name="userName"
+                                />
+                                <CustomInput
+                                    onChng={valueChangeHandler}
+                                    type="password"
+                                    label="Password"
+                                    id="pass"
+                                    name="password"
+                                />
+                                <div className="mb-3 text-end">
+                                    <Link to="forgot-password" className="">
+                                        Forgot Password?
+                                    </Link>
+                                </div>
+                                <div className="w-full grid place-items-center">
+                                    <button onClick={login}
+                                        className="bg-blue-500 hover:bg-blue-600 w-[300px] py-2 rounded-md"
+                                        type="submit"> Login
+                                    </button>
+                                </div>
                             </div>
 
                         </div>
-                    </div>  
+                    </div>
                 </div>
             </section>
         </div>

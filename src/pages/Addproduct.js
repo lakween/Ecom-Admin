@@ -15,6 +15,7 @@ import {toast} from "react-toastify";
 import customAlerts from "../alerts";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import {array, object, string} from "yup";
+import { post } from '../service/api.service';
 
 const {Dragger} = Upload;
 
@@ -89,22 +90,23 @@ const Addproduct = () => {
     };
 
 
-    const onClickProductHandler = () => {
+    const onClickProductHandler =async () => {
         setLoading(true)
         if (id) {
-            productSchema.validate(form, {abortEarly: false}).then(() => {
+            productSchema.validate(form, {abortEarly: false}).then(async() => {
+                const res = await post({body:form,api:'product'})
 
-                updateDocOFCollection('product', id, form).then(() => {
-                    toast.success('Updated Product successfully', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                }).catch(() => {
-                    toast.error('Updated Product fails', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                }).finally(() => {
-                    setLoading(false)
-                })
+                // updateDocOFCollection('product', id, form).then(() => {
+                //     toast.success('Updated Product successfully', {
+                //         position: toast.POSITION.BOTTOM_CENTER
+                //     });
+                // }).catch(() => {
+                //     toast.error('Updated Product fails', {
+                //         position: toast.POSITION.BOTTOM_CENTER
+                //     });
+                // }).finally(() => {
+                //     setLoading(false)
+                // })
             }).catch((errors) => {
                 setLoading(false)
                 console.log(errors, 'errors')
@@ -119,24 +121,26 @@ const Addproduct = () => {
         } else {
             setLoading(true)
             productSchema.validate(form, {abortEarly: false}).then(() => {
-                uploadFiles().then((urls) => {
-                    setLoading(true)
-                    createDocOfCollection('product', {...form, "images": urls}).then(() => {
-                        setForm({})
-                        setFiles({})
-                        toast.success(customAlerts.product.success, {
-                            position: toast.POSITION.BOTTOM_CENTER
-                        })
-                        window.location.reload();
-                    }).catch((e) => {
-                        toast.error(e, {
-                            position: toast.POSITION.BOTTOM_CENTER
-                        });
-                    }).finally(() => {
-                        setLoading(false)
-                    })
-                }).finally(() => {
-                    setLoading(false)
+                productSchema.validate(form, {abortEarly: false}).then(async() => {
+                    const res = await post({body:form,api:'product'})
+                // uploadFiles().then((urls) => {
+                //     setLoading(true)
+                //     createDocOfCollection('product', {...form, "images": urls}).then(() => {
+                //         setForm({})
+                //         setFiles({})
+                //         toast.success(customAlerts.product.success, {
+                //             position: toast.POSITION.BOTTOM_CENTER
+                //         })
+                //         window.location.reload();
+                //     }).catch((e) => {
+                //         toast.error(e, {
+                //             position: toast.POSITION.BOTTOM_CENTER
+                //         });
+                //     }).finally(() => {
+                //         setLoading(false)
+                //     })
+                // }).finally(() => {
+                //     setLoading(false)
                 })
             }).catch((errors) => {
                 setLoading(false)
