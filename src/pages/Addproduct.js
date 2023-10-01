@@ -91,70 +91,73 @@ const Addproduct = () => {
 
 
     const onClickProductHandler =async () => {
-        setLoading(true)
-        if (id) {
-            productSchema.validate(form, {abortEarly: false}).then(async() => {
-                const res = await post({body:form,api:'product'})
+        const res = await post({body:form,api:'product/add'})
+            console.log('res',res)
+        // setLoading(true)
+        // if (id) {
+            
+        //     productSchema.validate(form, {abortEarly: false}).then(async() => {
+               
 
-                // updateDocOFCollection('product', id, form).then(() => {
-                //     toast.success('Updated Product successfully', {
-                //         position: toast.POSITION.BOTTOM_CENTER
-                //     });
-                // }).catch(() => {
-                //     toast.error('Updated Product fails', {
-                //         position: toast.POSITION.BOTTOM_CENTER
-                //     });
-                // }).finally(() => {
-                //     setLoading(false)
-                // })
-            }).catch((errors) => {
-                setLoading(false)
-                console.log(errors, 'errors')
-                for (let error of errors.inner) {
-                    toast.error(error?.message, {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                        autoClose: 5000,
+        //         // updateDocOFCollection('product', id, form).then(() => {
+        //         //     toast.success('Updated Product successfully', {
+        //         //         position: toast.POSITION.BOTTOM_CENTER
+        //         //     });
+        //         // }).catch(() => {
+        //         //     toast.error('Updated Product fails', {
+        //         //         position: toast.POSITION.BOTTOM_CENTER
+        //         //     });
+        //         // }).finally(() => {
+        //         //     setLoading(false)
+        //         // })
+        //     }).catch((errors) => {
+        //         setLoading(false)
+        //         console.log(errors, 'errors')
+        //         for (let error of errors.inner) {
+        //             toast.error(error?.message, {
+        //                 position: toast.POSITION.BOTTOM_CENTER,
+        //                 autoClose: 5000,
 
-                    });
-                }
-            })
-        } else {
-            setLoading(true)
-            productSchema.validate(form, {abortEarly: false}).then(() => {
-                productSchema.validate(form, {abortEarly: false}).then(async() => {
-                    const res = await post({body:form,api:'product'})
-                // uploadFiles().then((urls) => {
-                //     setLoading(true)
-                //     createDocOfCollection('product', {...form, "images": urls}).then(() => {
-                //         setForm({})
-                //         setFiles({})
-                //         toast.success(customAlerts.product.success, {
-                //             position: toast.POSITION.BOTTOM_CENTER
-                //         })
-                //         window.location.reload();
-                //     }).catch((e) => {
-                //         toast.error(e, {
-                //             position: toast.POSITION.BOTTOM_CENTER
-                //         });
-                //     }).finally(() => {
-                //         setLoading(false)
-                //     })
-                // }).finally(() => {
-                //     setLoading(false)
-                })
-            }).catch((errors) => {
-                setLoading(false)
-                console.log(errors, 'errors')
-                for (let error of errors.inner) {
-                    toast.error(error?.message, {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                        autoClose: 5000,
+        //             });
+        //         }
+        //     })
+        // } else {
+        //     setLoading(true)
+        //     productSchema.validate(form, {abortEarly: false}).then(() => {
+        //         productSchema.validate(form, {abortEarly: false}).then(async() => {
+        //             const res = await post({body:form,api:'product'})
+        //         // uploadFiles().then((urls) => {
+        //         //     setLoading(true)
+        //         //     createDocOfCollection('product', {...form, "images": urls}).then(() => {
+        //         //         setForm({})
+        //         //         setFiles({})
+        //         //         toast.success(customAlerts.product.success, {
+        //         //             position: toast.POSITION.BOTTOM_CENTER
+        //         //         })
+        //         //         window.location.reload();
+        //         //     }).catch((e) => {
+        //         //         toast.error(e, {
+        //         //             position: toast.POSITION.BOTTOM_CENTER
+        //         //         });
+        //         //     }).finally(() => {
+        //         //         setLoading(false)
+        //         //     })
+        //         // }).finally(() => {
+        //         //     setLoading(false)
+        //         })
+        //     }).catch((errors) => {
+        //         setLoading(false)
+        //         console.log(errors, 'errors')
+        //         for (let error of errors.inner) {
+        //             toast.error(error?.message, {
+        //                 position: toast.POSITION.BOTTOM_CENTER,
+        //                 autoClose: 5000,
 
-                    });
-                }
-            })
+        //             });
+        //         }
+        //     })
 
-        }
+        // }
     }
 
     const onDeselectHandler = (value) => {

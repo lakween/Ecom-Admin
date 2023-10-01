@@ -16,10 +16,10 @@ const useUserLoginInfo = () => {
             if (user) {
                 let userData = await getDocFromCollection('userProfile', user?.uid);
                 if(userData?.type == 'admin') setModel({...userData, id: user?.uid, isLogged: true,photoURL:userData?.photoURL});
-                else  navigate('/')
+                // else  navigate('/')
             } else {
                 setModel({isLogged: false});
-                 navigate('/')
+                //  navigate('/')
             }
         });
     }

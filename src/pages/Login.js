@@ -1,10 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import CustomInput from "../Components/CustomInput";
 import { toast } from "react-toastify";
-import { StoreContext } from "../providers/ContextProvider";
+import CustomInput from "../Components/CustomInput";
 import { post } from '../service/api.service';
-import {useMutation} from 'react-query';
 
 const Login = () => {
 
