@@ -2,39 +2,48 @@ import React, {useEffect, useState} from "react";
 import {Button, Table} from "antd";
 import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction";
 import {toast} from "react-toastify";
+import { get } from '../service/api.service';
 import {Link} from "react-router-dom";
+import { CATEGORY_TAGS, PRODUCT_TAGS } from './../const/tag.const';
+import { useQuery } from 'react-query';
 
 const Categorylist = () => {
 
-    const [data, setData] = useState()
+    // const [data, setData] = useState()
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        setLoading(true)
-        getAllDocFromCollectionRT('category', setData).finally(() => {
-            setLoading(false)
-        })
-    }, []);
+    const { isLoading, data } = useQuery([CATEGORY_TAGS.LIST], async()=>get({api:'category'}), {
+        staleTime: Infinity
+      })
 
-    const onDeleteHandler = (id) => {
-        setLoading(true)
-        deleteDocument('category', id).then(() => {
-            toast.success('category successfully deleted', {
-                position: toast.POSITION.BOTTOM_CENTER
-            });
-        }).catch(() => {
-            toast.error('Failed to delete category.', {
-                position: toast.POSITION.BOTTOM_CENTER
-            });
-        }).finally(() => {
-            setLoading(false)
-        })
-    }
+    console.log(data,'dsta')
+
+    // useEffect(() => {
+    //     setLoading(true)
+    //     getAllDocFromCollectionRT('category', setData).finally(() => {
+    //         setLoading(false)
+    //     })
+    // }, []);
+
+    // const onDeleteHandler = (id) => {
+    //     setLoading(true)
+    //     deleteDocument('category', id).then(() => {
+    //         toast.success('category successfully deleted', {
+    //             position: toast.POSITION.BOTTOM_CENTER
+    //         });
+    //     }).catch(() => {
+    //         toast.error('Failed to delete category.', {
+    //             position: toast.POSITION.BOTTOM_CENTER
+    //         });
+    //     }).finally(() => {
+    //         setLoading(false)
+    //     })
+    // }
 
     const columns = [
         {
             title: "CNo",
-            dataIndex: "id",
+            dataIndex: "_id",
             sorter: (a, b) => a.id - b.id,
             render: (text) => (
                 <Link to={`/admin/category/${text}`}>{text}</Link>
@@ -46,16 +55,16 @@ const Categorylist = () => {
             sorter: (a, b) => a.name - b.name,
         },
 
-        {
-            title: "Action",
-            dataIndex: "id",
-            render: (text) => (
-                <div>
-                    <Button onClick={() => (onDeleteHandler(text))} className={'me-2'}>Delete</Button>
-                </div>
+        // {
+        //     title: "Action",
+        //     dataIndex: "id",
+        //     render: (text) => (
+        //         <div>
+        //             <Button onClick={() => (onDeleteHandler(text))} className={'me-2'}>Delete</Button>
+        //         </div>
 
-            ),
-        },
+        //     ),
+        // },
     ];
 
     return (

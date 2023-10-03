@@ -5,11 +5,15 @@ import {toast} from "react-toastify";
 import {useNavigate, useParams} from "react-router-dom";
 import Loading from "./Loading";
 import {array, object, string} from "yup";
+import { post } from './../service/api.service';
+import {useQueryClient } from 'react-query'
+import { CATEGORY_TAGS } from "../const/tag.const";
 
 const Addcat = () => {
     const [form, setForm] = useState({})
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
+    const queryClient = useQueryClient()
     let {id} = useParams()
 
     const valueChangeHandler = (event) => {
@@ -35,18 +39,22 @@ const Addcat = () => {
         if (id) {
             setLoading(true)
             categorySchema.validate(form, {abortEarly: false}).then(() => {
-                updateDocOFCollection('category', id, form).then(() => {
-                    toast.success('Category successfully updated', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                    navigate('/admin/list-category')
-                }).catch(() => {
-                    toast.error('Failed to Update Category', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                }).finally(() => {
-                    setLoading(false)
+                post({body:form,api:'category'}).then((data)=>{
+                    console.log('res',data)
                 })
+               
+                // updateDocOFCollection('category', id, form).then(() => {
+                //     toast.success('Category successfully updated', {
+                //         position: toast.POSITION.BOTTOM_CENTER
+                //     });
+                //     navigate('/admin/list-category')
+                // }).catch(() => {
+                //     toast.error('Failed to Update Category', {
+                //         position: toast.POSITION.BOTTOM_CENTER
+                //     });
+                // }).finally(() => {
+                //     setLoading(false)
+                // })
 
             }).catch((errors) => {
                 setLoading(false)
@@ -61,20 +69,24 @@ const Addcat = () => {
 
         } else {
             categorySchema.validate(form, {abortEarly: false}).then(() => {
-
-                setLoading(true)
-                createDocOfCollection('category', form).then(() => {
-                    toast.success('Category successfully added', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                    navigate('/admin/list-category')
-                }).catch(() => {
-                    toast.error('Failed to add Category', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                }).finally(() => {
-                    setLoading(false)
+                post({body:form,api:'category'}).then((data)=>{
+                    queryClient.invalidateQueries({queryKey:[CATEGORY_TAGS.LIST]})
+                    console.log('res',data)
                 })
+
+                // setLoading(true)
+                // createDocOfCollection('category', form).then(() => {
+                //     toast.success('Category successfully added', {
+                //         position: toast.POSITION.BOTTOM_CENTER
+                //     });
+                //     navigate('/admin/list-category')
+                // }).catch(() => {
+                //     toast.error('Failed to add Category', {
+                //         position: toast.POSITION.BOTTOM_CENTER
+                //     });
+                // }).finally(() => {
+                //     setLoading(false)
+                // })
 
             }).catch((errors) => {
                 setLoading(false)

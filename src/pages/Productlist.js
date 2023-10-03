@@ -21,6 +21,7 @@ const Productlist = () => {
 
     console.log(data,isLoading,'adadafa');
 
+    
     const columns = [
         {
             title: "SNo",
