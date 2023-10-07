@@ -37,25 +37,12 @@ const Addcat = () => {
     const addCategoryHandler = () => {
 
         if (id) {
-            setLoading(true)
             categorySchema.validate(form, {abortEarly: false}).then(() => {
                 post({body:form,api:'category'}).then((data)=>{
                     console.log('res',data)
                 })
                
-                // updateDocOFCollection('category', id, form).then(() => {
-                //     toast.success('Category successfully updated', {
-                //         position: toast.POSITION.BOTTOM_CENTER
-                //     });
-                //     navigate('/admin/list-category')
-                // }).catch(() => {
-                //     toast.error('Failed to Update Category', {
-                //         position: toast.POSITION.BOTTOM_CENTER
-                //     });
-                // }).finally(() => {
-                //     setLoading(false)
-                // })
-
+               
             }).catch((errors) => {
                 setLoading(false)
                 console.log(errors, 'errors')
@@ -74,19 +61,6 @@ const Addcat = () => {
                     console.log('res',data)
                 })
 
-                // setLoading(true)
-                // createDocOfCollection('category', form).then(() => {
-                //     toast.success('Category successfully added', {
-                //         position: toast.POSITION.BOTTOM_CENTER
-                //     });
-                //     navigate('/admin/list-category')
-                // }).catch(() => {
-                //     toast.error('Failed to add Category', {
-                //         position: toast.POSITION.BOTTOM_CENTER
-                //     });
-                // }).finally(() => {
-                //     setLoading(false)
-                // })
 
             }).catch((errors) => {
                 setLoading(false)
