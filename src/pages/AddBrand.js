@@ -50,7 +50,6 @@ const AddBrand = () => {
                     toast.error(error?.message, {
                         position: toast.POSITION.BOTTOM_CENTER,
                         autoClose: 5000,
-
                     });
                 }
             })

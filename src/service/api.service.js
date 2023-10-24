@@ -35,3 +35,12 @@ export const get = async ({ body = {}, api }) => {
       throw e
    }
 }
+
+export const deleteDoc = async ({ body = {}, api }) => {
+   try {
+      const res = await axios.delete(baseUrl + '/api/' + api, body)
+      return res?.data?.result
+   } catch (e) {
+      throw e
+   }
+}

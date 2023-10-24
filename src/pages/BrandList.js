@@ -1,20 +1,22 @@
-import {Button, Table} from "antd";
-import React, {useEffect, useState} from "react";
-import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction";
-import {toast} from "react-toastify";
-import {Link} from "react-router-dom";
+import { Button, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { deleteDocument, getAllDocFromCollectionRT } from "../actions/CommonAction";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import { BRAND_TAGS } from './../const/tag.const';
-import { get } from '../service/api.service';
-import { useQuery } from 'react-query';
+import { get, deleteDoc } from '../service/api.service';
+import { useQuery, useQueryClient } from 'react-query';
 
 const BrandList = () => {
-    const { isLoading, data } = useQuery([BRAND_TAGS.LIST], async()=>get({api:'brand'}), {
+    const { isLoading, data } = useQuery([BRAND_TAGS.LIST], async () => get({ api: 'brand' }), {
         staleTime: Infinity
-      })
+    })
+
+    const queryClient = useQueryClient()
 
     const onDeleteHandler = (id) => {
-       
-        deleteDocument('brand', id).then(() => {
+        deleteDoc({ api: `brand/${id}` }).then(() => {
+            queryClient.invalidateQueries({ queryKey: [BRAND_TAGS.LIST] })
             toast.success('Brand successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
@@ -22,8 +24,6 @@ const BrandList = () => {
             toast.error('Failed to delete Brand.', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
-        }).finally(() => {
-           
         })
     }
 
@@ -42,7 +42,7 @@ const BrandList = () => {
         },
         {
             title: "Action",
-            dataIndex: "id",
+            dataIndex: "_id",
             render: (text) => (
                 <div>
                     <Button onClick={() => (onDeleteHandler(text))} className={'me-2'}>Delete</Button>
@@ -55,8 +55,8 @@ const BrandList = () => {
         <div>
             <h3 className="mb-4 title">Brands</h3>
             <div>
-                <Table loading={isLoading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
-                       dataSource={data}/>
+                <Table loading={isLoading} pagination={false} scroll={{ x: 1500, y: 1000 }} columns={columns}
+                    dataSource={data} />
             </div>
         </div>
     )
