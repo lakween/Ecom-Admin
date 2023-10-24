@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import CustomInput from "../Components/CustomInput";
-import {createDocOfCollection, getDocFromCollection, updateDocOFCollection} from "../actions/CommonAction";
-import {toast} from "react-toastify";
-import {useNavigate, useParams} from "react-router-dom";
+import { createDocOfCollection, getDocFromCollection, updateDocOFCollection } from "../actions/CommonAction";
+import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading";
-import {array, object, string} from "yup";
-import { post } from './../service/api.service';
-import {useQueryClient } from 'react-query'
+import { array, object, string } from "yup";
+import { post, put, get } from './../service/api.service';
+import { useQueryClient } from 'react-query'
 import { CATEGORY_TAGS } from "../const/tag.const";
 
 const Addcat = () => {
@@ -14,11 +14,11 @@ const Addcat = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const queryClient = useQueryClient()
-    let {id} = useParams()
+    let { id } = useParams()
 
     const valueChangeHandler = (event) => {
-        let {name, value} = event.target
-        setForm({...form, [name]: value})
+        let { name, value } = event.target
+        setForm({ ...form, [name]: value })
     }
 
     useEffect(() => {
@@ -27,8 +27,9 @@ const Addcat = () => {
 
     const getAndSetValues = () => {
         setLoading(true)
-        getDocFromCollection('category', id).then((data) => {
+        get({ api: `category/${id}` }).then((data) => {
             setForm(data)
+
         }).finally(() => {
             setLoading(false)
         })
@@ -37,12 +38,16 @@ const Addcat = () => {
     const addCategoryHandler = () => {
 
         if (id) {
-            categorySchema.validate(form, {abortEarly: false}).then(() => {
-                post({body:form,api:'category'}).then((data)=>{
-                    console.log('res',data)
+            setLoading(true)
+            categorySchema.validate(form, { abortEarly: false }).then(() => {
+                put({ body: form, api: `category/${id}` }).then((data) => {
+                    setLoading(false)
+                    queryClient.invalidateQueries({ queryKey: [CATEGORY_TAGS.LIST] })
+                }).catch(() => {
+                    setLoading(false)
                 })
-               
-               
+
+
             }).catch((errors) => {
                 setLoading(false)
                 console.log(errors, 'errors')
@@ -55,10 +60,10 @@ const Addcat = () => {
             })
 
         } else {
-            categorySchema.validate(form, {abortEarly: false}).then(() => {
-                post({body:form,api:'category'}).then((data)=>{
-                    queryClient.invalidateQueries({queryKey:[CATEGORY_TAGS.LIST]})
-                    console.log('res',data)
+            categorySchema.validate(form, { abortEarly: false }).then(() => {
+                post({ body: form, api: 'category' }).then((data) => {
+                    queryClient.invalidateQueries({ queryKey: [CATEGORY_TAGS.LIST] })
+                    console.log('res', data)
                 })
 
 
@@ -81,7 +86,7 @@ const Addcat = () => {
 
             </h3>
             {
-                loading ? <Loading/> : (
+                loading ? <Loading /> : (
                     <div>
                         <CustomInput
                             onChng={valueChangeHandler}
@@ -92,7 +97,7 @@ const Addcat = () => {
                             id="blogcat"
                         />
                         <button onClick={addCategoryHandler}
-                                className="btn btn-success border-0 rounded-3 my-5"
+                            className="btn btn-success border-0 rounded-3 my-5"
                         >{id ? 'Update Category' : 'Add Category'}
                         </button>
                     </div>
