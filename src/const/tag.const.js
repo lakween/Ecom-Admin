@@ -5,3 +5,7 @@ export const PRODUCT_TAGS = {
   export const CATEGORY_TAGS = {
       LIST:'category-list'
   }
+
+  export const BRAND_TAGS = {
+    LIST:'brand-list'
+}

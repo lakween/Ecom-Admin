@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Button, Table } from "antd";
-import {
-    deleteDocument,
-    getAllDocFromCollectionRT,
-    getDocFromCollection
-} from "../actions/CommonAction";
-import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Table } from "antd";
+import React from "react";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { get } from '../service/api.service';
-import Loading from './Loading';
 import { PRODUCT_TAGS } from './../const/tag.const';
 
 

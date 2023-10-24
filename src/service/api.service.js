@@ -18,6 +18,15 @@ export const post = async ({ body = {}, api }) => {
    }
 }
 
+export const put = async ({ body = {}, api }) => {
+   try {
+      const res = await axios.put(baseUrl + '/api/' + api, body)
+      return res
+   } catch (e) {
+      throw e
+   }
+}
+
 export const get = async ({ body = {}, api }) => {
    try {
       const res = await axios.get(baseUrl + '/api/' + api, body)

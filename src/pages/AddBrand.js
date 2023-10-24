@@ -1,29 +1,33 @@
+import React, { useEffect, useState } from "react";
+import { useQuery ,useQueryClient  } from 'react-query';
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { object, string } from "yup";
 import CustomInput from "../Components/CustomInput";
-import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
-import {createDocOfCollection, getDocFromCollection, updateDocOFCollection} from "../actions/CommonAction";
-import {toast} from "react-toastify";
+import { createDocOfCollection, updateDocOFCollection } from "../actions/CommonAction";
+import { get } from '../service/api.service';
+import { BRAND_TAGS } from './../const/tag.const';
 import Loading from "./Loading";
-import {array, object, string} from "yup";
+import { post ,put } from './../service/api.service';
 
 const AddBrand = () => {
+    let {id} = useParams()
+    const { isLoading, data } = useQuery([BRAND_TAGS.LIST], async()=>get({api:`brand/${id}`}), {
+        staleTime: Infinity
+      })
     const [form, setForm] = useState({})
+    const queryClient = useQueryClient()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    let {id} = useParams()
+
 
     useEffect(() => {
         if (id) getAndSetValues()
     }, [id]);
 
-    console.log(form, 'form')
-
     const getAndSetValues = () => {
-        setLoading(true)
-        getDocFromCollection('brand', id).then((data) => {
+        get({api:`brand/${id}`}).then((data)=>{
             setForm(data)
-        }).finally(() => {
-            setLoading(false)
         })
     }
 
@@ -36,18 +40,13 @@ const AddBrand = () => {
         if (id) {
             brandSchema.validate(form, {abortEarly: false}).then(() => {
                 setLoading(true)
-                updateDocOFCollection('brand', id, form).then(() => {
-                    toast.success('Brand successfully updated', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                    navigate('/admin/list-brand')
-                }).catch(() => {
-                    toast.error('Failed to Update tag', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                }).finally(() => {
+                put({body:form,api:`brand/${id}`}).then((data)=>{
+                    setLoading(false)
+                    queryClient.invalidateQueries({queryKey:[BRAND_TAGS.LIST]})
+                }).catch(()=>{
                     setLoading(false)
                 })
+              
             }).catch((errors) => {
                 setLoading(false)
                 console.log(errors, 'errors')
@@ -63,18 +62,10 @@ const AddBrand = () => {
         } else {
             brandSchema.validate(form, {abortEarly: false}).then(() => {
                 setLoading(true)
-                createDocOfCollection('brand', form).then(() => {
-                    toast.success('Brand successfully added', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                    navigate('/admin/list-brand')
-                }).catch(() => {
-                    toast.error('Failed to add brand', {
-                        position: toast.POSITION.BOTTOM_CENTER
-                    });
-                }).finally(() => {
-                    setLoading(false)
+                post({body:form,api:'brands'}).then((data)=>{
+                    console.log('res',data)
                 })
+               
 
             }).catch((errors) => {
                 setLoading(false)

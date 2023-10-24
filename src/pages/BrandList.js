@@ -3,20 +3,17 @@ import React, {useEffect, useState} from "react";
 import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
+import { BRAND_TAGS } from './../const/tag.const';
+import { get } from '../service/api.service';
+import { useQuery } from 'react-query';
 
 const BrandList = () => {
-    const [data, setData] = useState()
-    const [loading, setLoading] = useState(false)
-
-    useEffect(() => {
-        setLoading(true)
-        getAllDocFromCollectionRT('brand', setData).finally(() => {
-            setLoading(false)
-        })
-    }, []);
+    const { isLoading, data } = useQuery([BRAND_TAGS.LIST], async()=>get({api:'brand'}), {
+        staleTime: Infinity
+      })
 
     const onDeleteHandler = (id) => {
-        setLoading(true)
+       
         deleteDocument('brand', id).then(() => {
             toast.success('Brand successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
@@ -26,14 +23,14 @@ const BrandList = () => {
                 position: toast.POSITION.BOTTOM_CENTER
             });
         }).finally(() => {
-            setLoading(false)
+           
         })
     }
 
     const columns = [
         {
             title: "SNo",
-            dataIndex: "id",
+            dataIndex: "_id",
             render: (text) => (
                 <Link to={`/admin/brand/${text}`}>{text}</Link>
             ),
@@ -58,7 +55,7 @@ const BrandList = () => {
         <div>
             <h3 className="mb-4 title">Brands</h3>
             <div>
-                <Table loading={loading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
+                <Table loading={isLoading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
                        dataSource={data}/>
             </div>
         </div>
