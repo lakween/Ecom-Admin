@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useQuery ,useQueryClient  } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { object, string } from "yup";
 import CustomInput from "../Components/CustomInput";
-import { createDocOfCollection, updateDocOFCollection } from "../actions/CommonAction";
 import { get } from '../service/api.service';
 import { BRAND_TAGS } from './../const/tag.const';
+import { post, put } from './../service/api.service';
 import Loading from "./Loading";
-import { post ,put } from './../service/api.service';
 
 const AddBrand = () => {
     let {id} = useParams()
-    const { isLoading, data } = useQuery([BRAND_TAGS.LIST], async()=>get({api:`brand/${id}`}), {
-        staleTime: Infinity
-      })
     const [form, setForm] = useState({})
     const queryClient = useQueryClient()
     const navigate = useNavigate()
@@ -62,14 +58,14 @@ const AddBrand = () => {
         } else {
             brandSchema.validate(form, {abortEarly: false}).then(() => {
                 setLoading(true)
-                post({body:form,api:'brands'}).then((data)=>{
-                    console.log('res',data)
+                post({body:form,api:'brand'}).then((data)=>{
+                    queryClient.invalidateQueries({queryKey:[BRAND_TAGS.LIST]})
+                }).finally(()=>{
+                    setLoading(false)
                 })
-               
 
             }).catch((errors) => {
                 setLoading(false)
-                console.log(errors, 'errors')
                 for (let error of errors.inner) {
                     toast.error(error?.message, {
                         position: toast.POSITION.BOTTOM_CENTER,
