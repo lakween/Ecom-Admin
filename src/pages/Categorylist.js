@@ -1,44 +1,34 @@
-import React, {useEffect, useState} from "react";
-import {Button, Table} from "antd";
-import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction";
-import {toast} from "react-toastify";
-import { get } from '../service/api.service';
-import {Link} from "react-router-dom";
-import { CATEGORY_TAGS, PRODUCT_TAGS } from './../const/tag.const';
-import { useQuery } from 'react-query';
+import { Button, Table } from "antd";
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from 'react-query';
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { deleteDoc, get } from '../service/api.service';
+import { CATEGORY_TAGS } from './../const/tag.const';
 
 const Categorylist = () => {
 
-    // const [data, setData] = useState()
     const [loading, setLoading] = useState(false)
+    const queryClient = useQueryClient()
 
     const { isLoading, data } = useQuery([CATEGORY_TAGS.LIST], async()=>get({api:'category'}), {
         staleTime: Infinity
       })
 
-    console.log(data,'dsta')
+      const onDeleteHandler = (id) => {
+        deleteDoc({ api: `category/${id}` }).then(() => {
+            queryClient.invalidateQueries({ queryKey: [CATEGORY_TAGS.LIST] })
+            toast.success('Category successfully deleted', {
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+        }).catch(() => {
+            toast.error('Failed to delete Category.', {
+                position: toast.POSITION.BOTTOM_CENTER
+            });
+        })
+    }
 
-    // useEffect(() => {
-    //     setLoading(true)
-    //     getAllDocFromCollectionRT('category', setData).finally(() => {
-    //         setLoading(false)
-    //     })
-    // }, []);
 
-    // const onDeleteHandler = (id) => {
-    //     setLoading(true)
-    //     deleteDocument('category', id).then(() => {
-    //         toast.success('category successfully deleted', {
-    //             position: toast.POSITION.BOTTOM_CENTER
-    //         });
-    //     }).catch(() => {
-    //         toast.error('Failed to delete category.', {
-    //             position: toast.POSITION.BOTTOM_CENTER
-    //         });
-    //     }).finally(() => {
-    //         setLoading(false)
-    //     })
-    // }
 
     const columns = [
         {
@@ -55,16 +45,16 @@ const Categorylist = () => {
             sorter: (a, b) => a.name - b.name,
         },
 
-        // {
-        //     title: "Action",
-        //     dataIndex: "id",
-        //     render: (text) => (
-        //         <div>
-        //             <Button onClick={() => (onDeleteHandler(text))} className={'me-2'}>Delete</Button>
-        //         </div>
+        {
+            title: "Action",
+            dataIndex: "_id",
+            render: (text) => (
+                <div>
+                    <Button onClick={() => (onDeleteHandler(text))} className={'me-2'}>Delete</Button>
+                </div>
 
-        //     ),
-        // },
+            ),
+        },
     ];
 
     return (
