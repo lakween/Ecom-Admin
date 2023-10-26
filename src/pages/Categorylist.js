@@ -61,7 +61,7 @@ const Categorylist = () => {
         <div>
             <h3 className="mb-4 title">Product Categories</h3>
             <div>
-                <Table loading={loading} pagination={false} scroll={{x: 1500, y: 1000}} columns={columns}
+                <Table loading={loading} pagination={false} scroll={{x: 1000, y: 1000}} columns={columns}
                        dataSource={data}/>
             </div>
         </div>

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import CustomInput from "../Components/CustomInput";
-import { createDocOfCollection, getDocFromCollection, updateDocOFCollection } from "../actions/CommonAction";
-import { toast } from "react-toastify";
+import { useQueryClient } from 'react-query';
 import { useNavigate, useParams } from "react-router-dom";
-import Loading from "./Loading";
-import { array, object, string } from "yup";
-import { post, put, get } from './../service/api.service';
-import { useQueryClient } from 'react-query'
+import { toast } from "react-toastify";
+import { object, string } from "yup";
+import CustomInput from "../Components/CustomInput";
 import { CATEGORY_TAGS } from "../const/tag.const";
+import { get, post, put } from './../service/api.service';
+import Loading from "./Loading";
 
 const Addcat = () => {
     const [form, setForm] = useState({})
