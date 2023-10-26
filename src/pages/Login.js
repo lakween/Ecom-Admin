@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CustomInput from "../Components/CustomInput";
 import { post } from '../service/api.service';
-import image from '../asset/images/background-login.jpg'
+import image from '../asset/images/image-2.jpg'
 
 const Login = () => {
 
@@ -49,7 +49,7 @@ const Login = () => {
                         className="flex bg-white rounded-lg items-center justify-start h-full" style={{ boxShadow: '0 0 20px 6px' }}>
                         <div className="w-[70%] h-full  border-tl-full border-bl-full border-tr-full border-r-0" style={{ backgroundImage: `url(${image})`, backgroundSize: 'cover' }}>
                             <div className=" flex gap-10 flex-col items-center justify-center border-tl-full border-bl-full border-tr-full border-r-0 bg-[#37373ead] w-full h-full">
-                            <h1 className="text-[100px] font-bold">Welcome Back</h1>
+                            {/* <h1 className="text-[100px] font-bold">Welcome Back</h1>
                                 <div>
                                    
                                     <br></br>
@@ -62,7 +62,7 @@ const Login = () => {
                                     <br></br>
                                     Need assistance? Contact Support
 
-                                </div>
+                                </div> */}
                             </div>
                             {/* <img
                                 src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
