@@ -4,20 +4,20 @@ import {deleteDocument, getAllDocFromCollectionRT} from "../actions/CommonAction
 import {toast} from "react-toastify";
 import { useQuery, useQueryClient } from "react-query";
 import { deleteDoc } from "firebase/firestore";
-import { CATEGORY_TAGS } from "../const/tag.const";
+import { CATEGORY_TAGS, COLOUR_TAG_LIST } from "../const/tag.const";
 import { get } from "../service/api.service";
 
 const Colorlist = () => {
     const [loading, setLoading] = useState(false)
     const queryClient = useQueryClient()
 
-    const { isLoading, data } = useQuery([CATEGORY_TAGS.LIST], async()=>get({api:'category'}), {
+    const { isLoading, data } = useQuery([COLOUR_TAG_LIST.LIST], async()=>get({api:'color'}), {
         staleTime: Infinity
       })
 
       const onDeleteHandler = (id) => {
         deleteDoc({ api: `color/${id}` }).then(() => {
-            queryClient.invalidateQueries({ queryKey: [CATEGORY_TAGS.LIST] })
+            queryClient.invalidateQueries({ queryKey: [COLOUR_TAG_LIST.LIST] })
             toast.success('Colour successfully deleted', {
                 position: toast.POSITION.BOTTOM_CENTER
             });
@@ -54,20 +54,6 @@ const Colorlist = () => {
         },
     ];
 
-    // const onDeleteHandler = (id) => {
-    //     setLoading(true)
-    //     deleteDocument('color', id).then(() => {
-    //         toast.success('Color successfully deleted', {
-    //             position: toast.POSITION.BOTTOM_CENTER
-    //         });
-    //     }).catch(() => {
-    //         toast.error('Failed to delete color.', {
-    //             position: toast.POSITION.BOTTOM_CENTER
-    //         });
-    //     }).finally(() => {
-    //         setLoading(false)
-    //     })
-    // }
     return (
         <div>
             <h3 className="mb-4 title">Colors</h3>

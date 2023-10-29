@@ -13,3 +13,7 @@ export const BRAND_TAGS = {
 export const PRODUCT_TAG_TAGS = {
   LIST: 'tag-list'
 }
+
+export const COLOUR_TAG_LIST = {
+  LIST: 'tag-color'
+}
