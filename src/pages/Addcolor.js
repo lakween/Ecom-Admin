@@ -2,12 +2,30 @@ import React, {useState} from "react";
 import CustomInput from "../Components/CustomInput";
 import {createDocOfCollection} from "../actions/CommonAction";
 import {toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {object, string} from "yup";
+import { useQueryClient } from 'react-query';
+import { get, put } from "../service/api.service";
+import { CATEGORY_TAGS } from "../const/tag.const";
 
 const Addcolor = () => {
     const [form, setForm] = useState({})
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
+    const queryClient = useQueryClient()
+    let { id } = useParams()
+
+
+    const getAndSetValues = () => {
+        setLoading(true)
+        get({ api: `color/${id}` }).then((data) => {
+            setForm(data)
+
+        }).finally(() => {
+            setLoading(false)
+        })
+    }
+
     const valueChangeHandler = (event) => {
         let {name, value} = event.target
         setForm({...form, [name]: value})
@@ -16,18 +34,25 @@ const Addcolor = () => {
     const addColorHandler = () => {
         colourSchema.validate(form, {abortEarly: false}).then(() => {
 
-            createDocOfCollection('color', form).then(() => {
-                toast.success('Color successfully added', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
-
-                navigate('/admin/list-color')
-
+            put({ body: form, api: `category/${id}` }).then((data) => {
+                setLoading(false)
+                queryClient.invalidateQueries({ queryKey: [CATEGORY_TAGS.LIST] })
             }).catch(() => {
-                toast.error('Failed to add color', {
-                    position: toast.POSITION.BOTTOM_CENTER
-                });
+                setLoading(false)
             })
+
+            // createDocOfCollection('color', form).then(() => {
+            //     toast.success('Color successfully added', {
+            //         position: toast.POSITION.BOTTOM_CENTER
+            //     });
+
+            //     navigate('/admin/list-color')
+
+            // }).catch(() => {
+            //     toast.error('Failed to add color', {
+            //         position: toast.POSITION.BOTTOM_CENTER
+            //     });
+            // })
 
         }).catch((errors) => {
             console.log(errors, 'errors')
