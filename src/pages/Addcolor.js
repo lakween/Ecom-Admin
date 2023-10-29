@@ -13,8 +13,6 @@ const Addcolor = () => {
         setForm({...form, [name]: value})
     }
 
-    console.log(form)
-
     const addColorHandler = () => {
         colourSchema.validate(form, {abortEarly: false}).then(() => {
 

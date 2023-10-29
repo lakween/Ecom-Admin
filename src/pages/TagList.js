@@ -45,7 +45,7 @@ const TagList = () => {
         },
         {
             title: "Action",
-            dataIndex: "id",
+            dataIndex: "_id",
             innerWidth:50,
             render: (text) => (
                 <div>
