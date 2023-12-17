@@ -1,6 +1,6 @@
 const customAlerts = {
     "product": {
-        "success": "succc",
+        "success": "Add Product Success",
         "error": "errr"
     }
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CustomInput from "../Components/CustomInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -21,6 +22,7 @@ const { Dragger } = Upload;
 const Addproduct = () => {
 
     const [form, setForm] = useState({})
+    const navigator = useNavigate()
     const [categoryList, setCategoryList] = useState([])
     const [loading, setLoading] = useState(false)
     const [colours, setColors] = useState([])
@@ -93,7 +95,6 @@ const Addproduct = () => {
         },
     };
 
-    console.log(files, 'files')
 
     const onClickProductHandler = () => {
         setLoading(true)
@@ -105,7 +106,7 @@ const Addproduct = () => {
                         toast.success('Updated Product successfully', {
                             position: toast.POSITION.BOTTOM_CENTER
                         });
-                        window.location.reload();
+                        navigator('/admin/list-product')
                     }).catch(() => {
                         toast.error('Updated Product fails', {
                             position: toast.POSITION.BOTTOM_CENTER
@@ -142,10 +143,10 @@ const Addproduct = () => {
                     createDocOfCollection('product', { ...form, "images": urls }).then(() => {
                         setForm({})
                         setFiles({})
-                        toast.success(customAlerts.product.success, {
+                        toast.success('Add Product Success', {
                             position: toast.POSITION.BOTTOM_CENTER
                         })
-                        window.location.reload();
+                        navigator('/admin/list-product')
                     }).catch((e) => {
                         toast.error(e, {
                             position: toast.POSITION.BOTTOM_CENTER

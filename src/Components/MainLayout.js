@@ -151,11 +151,11 @@ const MainLayout = () => {
                         //         },
                         //     ],
                         // },
-                        // {
-                        //     key: "enquiries",
-                        //     icon: <FaClipboardList className="fs-4"/>,
-                        //     label: "Enquiries",
-                        // },
+                        {
+                            key: "enquiries",
+                            icon: <FaClipboardList className="fs-4"/>,
+                            label: "Enquiries",
+                        },
                     ]}
                 />
             </Sider>
